@@ -25,7 +25,7 @@ class User(AbstractBaseUser):
     gender_choose = models.CharField(_("Gender"), max_length=6, choices=gender)
     
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['mobile_phone', 'full_name']
+    REQUIRED_FIELDS = ['mobile_phone', 'full_name', 'username']
     
     objects = MyManager()
     def has_perm(self, perm, obj=None):

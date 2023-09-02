@@ -12,8 +12,10 @@ class MyManager(BaseUserManager):
         user = self.model(
             email=email,
             
+            
+            
         )
-        user.password = make_password(password)
+        user.set_password(password)
         user.save(using=self._db)
         return user
         

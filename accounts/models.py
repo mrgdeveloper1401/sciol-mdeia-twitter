@@ -34,6 +34,10 @@ class User(AbstractBaseUser):
     def has_mudle_perm(self, app_labe):
         return True
     
+    @property
+    def is_staff(self):
+        return self.is_admin
+    
     def __str__(self) :
         return self.username
     

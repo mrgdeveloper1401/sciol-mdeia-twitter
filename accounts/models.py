@@ -4,9 +4,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from .managers import MyManager
+from core.models import CreateModel, DeleteModel, UpdateModel
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, CreateModel, DeleteModel, UpdateModel):
     username = models.CharField(_("Username"), max_length=100, unique=True)
     email = models.EmailField(_("Email"), max_length=255, unique=True)
     full_name = models.CharField(_("Full name"), max_length=255)
@@ -29,10 +30,12 @@ class User(AbstractBaseUser):
     
     objects = MyManager()
     def has_perm(self, perm, obj=None):
-        return True
+        if self.is_active and self.is_superuser:
+            return True
     
-    def has_mudle_perm(self, app_labe):
-        return True
+    def has_module_perms(self, app_labe):
+        if self.is_active and self.is_superuser:
+            return True
     
     @property
     def is_staff(self):

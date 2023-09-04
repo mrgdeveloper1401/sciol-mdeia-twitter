@@ -4,13 +4,14 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from .managers import MyManager
+from core.models import CreateModel, DeleteModel, UpdateModel
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, CreateModel, DeleteModel, UpdateModel):
     username = models.CharField(_("Username"), max_length=100, unique=True)
     email = models.EmailField(_("Email"), max_length=255, unique=True)
     full_name = models.CharField(_("Full name"), max_length=255)
-    mobile_phone = models.BooleanField(_("Mobile"), max_length=11, unique=True)
+    mobile_phone = models.CharField(_("Mobile"), max_length=11, unique=True)
     birthday = models.DateField(_("Birthday"), auto_now=timezone.now())
     profile_image = models.ImageField(_("Profile"), upload_to = 'images/profile')
     banner_image = models.ImageField(_("Profile"), upload_to = 'images/banner_profile')
@@ -25,14 +26,20 @@ class User(AbstractBaseUser):
     gender_choose = models.CharField(_("Gender"), max_length=6, choices=gender)
     
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["email", 'mobile_phone', 'full_name']
+    REQUIRED_FIELDS = ['mobile_phone', 'full_name', 'username']
     
     objects = MyManager()
     def has_perm(self, perm, obj=None):
-        return True
+        if self.is_active and self.is_superuser:
+            return True
     
-    def has_mudle_perm(self, app_labe):
-        return True
+    def has_module_perms(self, app_labe):
+        if self.is_active and self.is_superuser:
+            return True
+    
+    @property
+    def is_staff(self):
+        return self.is_admin
     
     def __str__(self) :
         return self.username

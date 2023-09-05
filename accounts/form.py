@@ -25,7 +25,7 @@ class UserCreationForms(forms.ModelForm):
         password1 = cd.get('password1')
         password2 = cd.get('password2')
         if password1 and password2 and password1 != password2:
-            raise ValidationError('password and password1 must be the same')
+            raise ValidationError('password must be the same')
         
     def clean_email(self):
         cd = self.cleaned_data

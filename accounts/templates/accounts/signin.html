@@ -7,7 +7,7 @@
 {% block content %}
     <form action='' method='post' novalidate>
         {% csrf_token %}
-        {{ signin.as_div }}
+        {{ form }}
         <input type='submit' value='login' class='btn btn-primary'>
     </form>
     {% comment %} <a href='{% url "accounts:login_mobile" %}' class='btn btn-info'>you can log in with email</a> {% endcomment %}

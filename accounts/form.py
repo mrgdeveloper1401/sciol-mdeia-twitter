@@ -111,8 +111,8 @@ class UserSignUpForm(forms.ModelForm):
         return cd['username']
         
 class UserSignIn(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'enter password'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'enter email'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'enter password'}))
 
 # class UserSignIn(AuthenticationForm):
 #     ...

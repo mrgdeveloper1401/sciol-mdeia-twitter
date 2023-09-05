@@ -34,6 +34,12 @@ class UserSignupView(View):
 
 
 class SignInView(View):
+    
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('post:home')
+        return super().dispatch(request, *args, **kwargs)
+    
     form_class = UserSignIn
     template_name = 'accounts/signin.html'
     def get(self, request):
@@ -48,7 +54,7 @@ class SignInView(View):
         if signin.is_valid():
             cd = signin.cleaned_data
             user = authenticate(
-                email=cd['email'],
+                username=cd['username'],
                 password=cd['password']
             )
             
@@ -56,7 +62,7 @@ class SignInView(View):
                 login(request, user)
                 messages.success(request, 'Login successful', 'success')
                 return redirect('post:home')
-            messages.error(request, 'username or password is wrong', 'error')
+            messages.error(request, 'username or password is wrong', 'warning')
         return render(request, self.template_name, {'form': signin})
         
 class LogOutView(LoginRequiredMixin, View):

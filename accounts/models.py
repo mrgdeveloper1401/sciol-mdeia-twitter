@@ -29,6 +29,7 @@ class User(AbstractBaseUser, CreateModel, DeleteModel, UpdateModel):
     REQUIRED_FIELDS = ['mobile_phone', 'full_name', 'username']
     
     objects = MyManager()
+    
     def has_perm(self, perm, obj=None):
         if self.is_active and self.is_superuser:
             return True

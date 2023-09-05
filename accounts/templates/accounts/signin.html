@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>sign in</title>
+{% endblock  %}
+
+{% block content %}
+    <form action='' method='post' novalidate>
+        {% csrf_token %}
+        {{ form }}
+        <input type='submit' value='login' class='btn btn-primary'>
+    </form>
+    {% comment %} <a href='{% url "accounts:login_mobile" %}' class='btn btn-info'>you can log in with email</a> {% endcomment %}
+{% endblock  %}

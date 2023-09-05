@@ -24,4 +24,7 @@ class PostModel(CreateModel, UpdateModel, DeleteModel):
             default=StatusPosts.Published
         )
 
-
+    class Meta:
+        verbose_name = _('post')
+        verbose_name_plural = _('posts')
+        db_table = 'post-model'

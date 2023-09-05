@@ -59,7 +59,8 @@ class SignInView(View):
             messages.error(request, 'username or password is wrong', 'error')
         return render(request, self.template_name, {'form': signin})
         
-# class LogOutView(LoginRequiredMixin, View):
-#     def get(self, request):
-#         if request.user.id == user.id:
-#             logout(request, user_id)
+class LogOutView(LoginRequiredMixin, View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, 'Logged out successfully', 'success')
+        return redirect('accounts:login')

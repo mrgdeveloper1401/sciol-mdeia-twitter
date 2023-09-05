@@ -18,7 +18,7 @@
             </a>
             <ul class="dropdown-menu">
                 {% if request.user.is_authenticated %}
-                    <li><a class="dropdown-item" href="#">signout</a></li>
+                    <li><a class="dropdown-item" href="{% url "accounts:logout" %}">signout</a></li>
                 {% else %}
                     <li><a class="dropdown-item" href="{% url "accounts:logup" %}">sginup</a></li>
                     <li><a class="dropdown-item" href="{% url 'accounts:login' %}">sginin</a></li>

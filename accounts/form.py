@@ -14,12 +14,19 @@ class UserCreationForms(forms.ModelForm):
         fields = ('username', 'email', 'mobile_phone', 'full_name')
         
             
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password1'] and cd['password2'] and cd['password1'] != cd['password2']:
-            raise ValidationError('password1 must be same')
-        return cd['password2']
+    # def clean_password2(self):
+    #     cd = self.cleaned_data
+    #     if cd['password1'] and cd['password2'] and cd['password1'] != cd['password2']:
+    #         raise ValidationError('password1 must be same')
+    #     return cd['password2']
             
+    def clean(self):
+        cd = super().clean()
+        password1 = cd.get('password1')
+        password2 = cd.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise ValidationError('password and password1 must be the same')
+        
     def clean_email(self):
         cd = self.cleaned_data
         if User.objects.filter(email=cd['email']).exists():
@@ -78,11 +85,12 @@ class UserSignUpForm(forms.ModelForm):
 
         }
         
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password'] and cd['password2'] and cd['password'] != cd['password2']:
-            raise ValidationError('password1 must be same')
-        return cd['password2']
+    def clean(self):
+        cd = super().clean()
+        password1 = cd.get('password')
+        password2 = cd.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise ValidationError('password and password1 must be the same')
             
     def clean_email(self):
         cd = self.cleaned_data

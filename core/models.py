@@ -14,6 +14,7 @@ class CreateModel(models.Model):
 
 class UpdateModel(models.Model):
     update_at = models.DateTimeField(_('update_at'), default=timezone.now, null=True)
+    # update = models.DateTimeField(_('update'), auto_now=True)
     
     class Meta:
         verbose_name = _('update_model')
@@ -23,6 +24,7 @@ class UpdateModel(models.Model):
         
 class DeleteModel(models.Model):
     deleted_at = models.DateTimeField(_('deleted_at'), default=timezone.now, null=True)
+    # delete = models.DateTimeField(_('delete'), auto_now=True)
     is_deleted = models.BooleanField(_('is_deleted'), default=False, editable=False)
 
     class Meta:

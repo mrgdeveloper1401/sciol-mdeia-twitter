@@ -20,12 +20,13 @@ class UsersAdmin(UserAdmin):
     ordering = ['username', 'create_at']
     
     list_display_links = ('username', 'email', 'mobile_phone')
+    readonly_fields = ('update_at', )
     
     fieldsets = (
         ('authenticate', {'fields': ('username', 'password')}),
         (('persolan info'), {'fields': ('full_name','email', 'mobile_phone', 'gender_choose')}),
         (('permissions', {'fields': ('is_admin','is_superuser', 'is_active' )})),
-        (('important date', {'fields': ('update_at', 'deleted_at', 'last_login')})),
+        (('important date', {'fields': ('last_login', 'update_at', )})),
         
         
     )

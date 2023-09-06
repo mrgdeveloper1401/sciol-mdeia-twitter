@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from post.models import PostModel
 
 
 class UserSignupView(View):
@@ -63,7 +64,7 @@ class SignInView(View):
                 messages.success(request, 'Login successful', 'success')
                 return redirect('post:home')
             messages.error(request, 'username or password is wrong', 'warning')
-        return render(request, self.template_name, {'form': signin})
+        return render(request, self.template_name, {'fmorm': signin})
         
 class LogOutView(LoginRequiredMixin, View):
     def get(self, request):
@@ -75,4 +76,10 @@ class LogOutView(LoginRequiredMixin, View):
 class UserProfileView(View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        return render(request, 'accounts/profile.html', {'user': user})
+        post = User.objects.filter(username=user)
+        context = {
+            'user': user,
+            'posts': post,
+            
+        }
+        return render(request, 'accounts/profile.html', context)

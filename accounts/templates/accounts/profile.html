@@ -6,8 +6,10 @@
 
 {% block content %}
     full_name: {{ user.full_name }} </br>
-    username: <a href='{% url "accounts:profile" user.id %}'> {{ user.username }}</a> </br>
+    username {{ user.username }} </br>
     email: {{ user.email }} </br>
-    mobbile phone: {{ user.mobile_phone }} </br>
+    mobbile phone: {{ user.mobile_phone }} </br></br>
+
+
 
 {% endblock  %}

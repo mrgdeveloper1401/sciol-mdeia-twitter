@@ -8,7 +8,8 @@ urlpatterns = [
     # path('signin/mobile/', views.SignInMobileView.as_view(), name='login_mobile'),
     path('signup/', views.UserSignupView.as_view(), name='logup'),
     path('logout/', views.LogOutView.as_view(), name='logout'),
-    path('profile/<int:user_id>/', views.UserProfileView.as_view(), name='profile')
+    path('profile/<int:user_id>/', views.UserProfileView.as_view(), name='profile'),
+    # path('profile/<int:user_id>/<str:slug_id>/', views.UserProfileView.as_view(), name='profile_post')
     
     
     

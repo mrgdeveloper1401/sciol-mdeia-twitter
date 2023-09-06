@@ -5,5 +5,14 @@
 {% endblock  %}
 
 {% block content %}
-    
+    <section class='text-center'>
+        {% for posts in post  %}
+                {{ posts.user }} </br>
+                {{ posts.body }} </br>
+                {{ posts.image }} </br>
+                {{ posts.video }} </br>
+                location: {{ posts.location }} </br>
+                create : {{ posts.create_at }} </br>
+        {% endfor %}
+    </section>
 {% endblock  %}

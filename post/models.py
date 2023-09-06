@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from core.models import *
 from accounts.models import User
+from django.urls import reverse
 
 
 class PostModel(CreateModel, UpdateModel):
@@ -24,6 +25,10 @@ class PostModel(CreateModel, UpdateModel):
             default=StatusPosts.Published
         )
 
+    def get_absolute_url(self):
+        return reverse("", args=(self.id, self.slug))
+    
+    
     class Meta:
         verbose_name = _('post')
         verbose_name_plural = _('posts')

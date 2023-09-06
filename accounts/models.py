@@ -37,6 +37,9 @@ class User(AbstractBaseUser, CreateModel, UpdateModel):
     def has_module_perms(self, app_labe):
         if self.is_active and self.is_superuser:
             return True
+        
+    def get_absolute_url(self):
+        return reverse('accounts:profile', args=(self.id))
     
     @property
     def is_staff(self):

@@ -91,6 +91,17 @@ class UpdatePostView(LoginRequiredMixin, View):
     
 class PostCreateView(LoginRequiredMixin, View):
     
+    def setup(self, request, *args, **kwargs):
+        self.user = User.objects.get(pk=kwargs['user_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.id != self.user.id:
+            messages.error(request, 'invalid user', 'warning')
+            return redirect('post:home')
+        return super().dispatch(request, *args, **kwargs)
+    
+    
     
     form_class = PostCreateUpdateForm
     template_name = 'post/create_post.html'

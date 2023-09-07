@@ -9,4 +9,4 @@ class PostModelAdmin(admin.ModelAdmin):
     search_fields = ('user', )
     list_filter = ('create_at', 'update_at')
     raw_id_fields = ('user', )
-    list_display = ('user', 'location', 'create_at', 'update_at', 'body')
+    list_display = ('user', 'location', 'id', 'create_at', 'update_at', 'body')

@@ -19,23 +19,30 @@ class HomeView(View):
     
 
 class PostDetailsView(LoginRequiredMixin, View):
+    
+    def setup(self, request, *args, **kwargs):
+        self.post = PostModel.objects.get(pk=kwargs['post_id'], slug=kwargs['post_slug'])
+        return super().setup(request, *args, **kwargs)
+    
     template_name = 'post/post_details.html'
     
     def get(self, request, *args, **kwargs):
-        post = PostModel.objects.get(pk=kwargs['post_id'], slug=kwargs['post_slug'])
-        # user = User.objects.all(user=post)
+        post = self.post
         context = {
             'post': post,
-            # 'user': user,
-            
-            
-        }
+            }
         return render(request, self.template_name, context)
     
 
 class PostDeleteView(LoginRequiredMixin, View):
-    def get(self, request, post_id):
-        post = PostModel.objects.get(pk=post_id)
+    
+    def setup(self, request, *args, **kwargs):
+        self.post = PostModel.objects.get(pk=kwargs['post_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    
+    def get(self, request, *args, **kwargs):
+        post = self.post
         context = {
             'post': post
         }

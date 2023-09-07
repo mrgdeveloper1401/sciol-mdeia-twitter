@@ -14,6 +14,14 @@ class PostModel(CreateModel, UpdateModel):
     location = models.CharField(max_length=730, blank=True, null=True,
                                 help_text='You can write the location of this post')
     slug = models.SlugField(max_length=30)
+    
+    def __str__(self):
+        return f'{self.user} -- {self.slug}'
+    
+    
+    def get_absolute_url(self):
+        return reverse("post:post_details", args=(self.id, self.slug))
+    
     class StatusPost(models.Model):
         class StatusPosts(models.TextChoices):
             Published = 'pb', 'published'
@@ -23,11 +31,7 @@ class PostModel(CreateModel, UpdateModel):
             max_length=2,
             choices=StatusPosts.choices,
             default=StatusPosts.Published
-        )
-
-    def get_absolute_url(self):
-        return reverse("", args=(self.id, self.slug))
-    
+        ) 
     
     class Meta:
         verbose_name = _('post')

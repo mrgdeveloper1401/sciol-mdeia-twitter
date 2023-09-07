@@ -14,7 +14,7 @@ class UsersAdmin(UserAdmin):
     form = UserChangeForms
     add_form = UserCreationForms
     
-    list_display = ['username', 'email', 'full_name', 'mobile_phone', 'is_admin', 'is_active']
+    list_display = ['username', 'email', 'id', 'full_name', 'mobile_phone', 'is_admin', 'is_active']
     list_filter = ['is_admin', 'is_active']
     search_fields = ['username', 'email']
     ordering = ['username', 'create_at']

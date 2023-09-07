@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>details</title>
+{% endblock  %}
+
+{% block content %}
+    <setion class='card'>
+        {{ post.user.username }} </br>
+        {{ post.user.full_name }} </br>
+        {{ post.user.email }} </br>
+        {{ post.user.mobile_phone }} </br>
+    </setion>
+
+    <section class='text-center'>
+                {{ post.user }} </br>
+                {{ post.body }}</br>
+                {{ post.image }} </br>
+                {{ post.video }} </br>
+                location: {{ post.location }} </br>
+                create : {{ post.create_at }} </br> </br>
+
+                {% if request.user.id == post.user.id %}
+                    <a class='btn btn-primary' href='{% url "post:delete_post" post.id %}'>delete post</a> 
+                    <a class='btn btn-danger' href='{% url "post:update_post" post.id %}'>update post</a>
+                {% endif %}
+    </section>
+{% endblock  %}

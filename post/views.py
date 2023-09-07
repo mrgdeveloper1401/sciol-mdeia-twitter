@@ -6,7 +6,7 @@ from .models import PostModel
 from accounts.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from .forms import PostUpdateForm
+from .forms import PostCreateUpdateForm
 from django.utils.text import slugify
 
 
@@ -69,7 +69,7 @@ class UpdatePostView(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
     
     
-    from_class = PostUpdateForm
+    from_class = PostCreateUpdateForm
     template_name = 'post/update.html'
     
     def get(self, request, *args, **kwargs):
@@ -88,3 +88,25 @@ class UpdatePostView(LoginRequiredMixin, View):
             return redirect('post:post_details', post.id, post.slug)
         return render(request, self.template_name, {'update': update})
     
+    
+class PostCreateView(LoginRequiredMixin, View):
+    
+    
+    form_class = PostCreateUpdateForm
+    template_name = 'post/create_post.html'
+    
+    def get(self, request, *args, **kwargs):
+        create_post = self.form_class()
+        return render(request, self.template_name, {'create': create_post})
+    
+    def post(self, request, *args, **kwargs):
+        create = self.form_class(request.POST)
+        if create.is_valid():
+            cd = create.cleaned_data
+            new_create = create.save(commit=False)
+            new_create.user = request.user
+            new_create.slug = slugify(cd['body'][:30])
+            new_create.save()
+            messages.success(request, 'create post', 'success')
+            return redirect('post:home')
+        return render(request, self.template_name, {'create': create})

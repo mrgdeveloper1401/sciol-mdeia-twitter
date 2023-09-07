@@ -5,6 +5,15 @@
 {% endblock  %}
 
 {% block content %}
+    {% comment %} <section class='text-center mb-5'>
+        <form method='post' action='' >
+            {% csrf_token %}
+            {{ create.as_p }}
+        </form>
+    </section> {% endcomment %}
+
+    <a href='{% url "post:post_create" request.user.id %}'>create post</a>
+
     <section class='text-center'>
         {% for posts in post  %}
                 {{ posts.user }} </br>

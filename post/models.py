@@ -7,7 +7,7 @@ from django.urls import reverse
 
 
 class PostModel(CreateModel, UpdateModel):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='post_users')
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='posts')
     body = models.TextField(help_text='Please write caption')
     image = models.ImageField(upload_to='posts',blank=True, null=True, help_text='Please upload your image')
     video = models.FileField(upload_to='post/video', blank=True, null=True, help_text='please upload your video')
@@ -37,3 +37,6 @@ class PostModel(CreateModel, UpdateModel):
         verbose_name = _('post')
         verbose_name_plural = _('posts')
         db_table = 'post-model'
+        
+        # order in database and show web
+        ordering = ('-create_at', 'body', )

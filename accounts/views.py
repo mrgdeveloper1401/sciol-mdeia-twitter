@@ -66,7 +66,7 @@ class SignInView(View):
                 messages.success(request, 'Login successful', 'success')
                 return redirect('post:home')
             messages.error(request, 'username or password is wrong', 'warning')
-        return render(request, self.template_name, {'fmorm': signin})
+        return render(request, self.template_name, {'form': signin})
         
 class LogOutView(LoginRequiredMixin, View):
     def get(self, request):
@@ -78,13 +78,17 @@ class LogOutView(LoginRequiredMixin, View):
 class UserProfileView(View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
+        post = user.posts.all()
         context = {
             'user': user,
+            'post': post,
+            
             
         }
         return render(request, 'accounts/profile.html', context)
     
 
+# show form reset password and send form reset password to email account
 class UserPasswordResetView(auth_views.PasswordResetView):
     template_name = 'accounts/password_reset_form.html'
     
@@ -95,5 +99,18 @@ class UserPasswordResetView(auth_views.PasswordResetView):
     email_template_name = 'accounts/password_reset_email.html'
     
 
+# show success send email
 class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
     template_name = 'accounts/password_reset_done.html'
+    
+
+# show fileds password
+class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    # show form to user
+    template_name = 'accounts/password_reset_confirm.html'
+    success_url = reverse_lazy('accounts:password_reset_complete')
+    
+    
+# show message after password reset
+class PasswordResetComplateView(auth_views.PasswordResetCompleteView):
+    template_name = 'accounts/password_reset_complete.html'

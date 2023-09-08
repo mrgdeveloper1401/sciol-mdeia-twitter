@@ -4,6 +4,7 @@ from .models import PostModel
 
 @admin.register(PostModel)
 class PostModelAdmin(admin.ModelAdmin):
+    ordering = ('-create_at', )
     readonly_fields = ('update_at', )
     prepopulated_fields = {'slug': ('body', )}
     search_fields = ('user', )

@@ -10,6 +10,12 @@
     email: {{ user.email }} </br>
     mobbile phone: {{ user.mobile_phone }} </br></br>
 
+    <section class='text-center'>
+        {% for all_post in post %}
+            {{ all_post.body }} </br> </br>
+        {% endfor %}
+    </section>
+
 
 
 {% endblock  %}

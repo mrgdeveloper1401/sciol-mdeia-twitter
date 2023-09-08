@@ -7,7 +7,12 @@ class SignupSerializers(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('full_name', 'username', 'email', 'mobile_phone', 'password', 'password2')
+        extra_kwargs = {'password': {'write_only': True},
+        'password2': {'write_only': True},}
         
+    def create(self, validated_data):
+        del validated_data['password2']
+        return User.objects.create_user(**validated_data)
 
     def validate_username(self, value):
         if value == 'admin' and value == 'root':

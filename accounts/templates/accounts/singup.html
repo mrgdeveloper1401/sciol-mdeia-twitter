@@ -9,5 +9,6 @@
         {% csrf_token %}
         {{ form }}
         <input type='submit' value='create account' class='btn btn-primary'>
-    </form>
+    </form> </br>
+    <a href='{% url "accounts:login" %}'>login account</a>
 {% endblock  %}

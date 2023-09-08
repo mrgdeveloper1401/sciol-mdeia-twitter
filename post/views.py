@@ -1,6 +1,6 @@
 from typing import Any
 from django import http
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .models import PostModel
 from accounts.models import User
@@ -21,7 +21,8 @@ class HomeView(View):
 class PostDetailsView(LoginRequiredMixin, View):
     
     def setup(self, request, *args, **kwargs):
-        self.post = PostModel.objects.get(pk=kwargs['post_id'], slug=kwargs['post_slug'])
+        self.post = get_object_or_404(PostModel, pk=kwargs['post_id'], slug=kwargs['post_slug'])
+        # self.post = PostModel.objects.get(pk=kwargs['post_id'], slug=kwargs['post_slug'])
         return super().setup(request, *args, **kwargs)
     
     template_name = 'post/post_details.html'
@@ -37,7 +38,8 @@ class PostDetailsView(LoginRequiredMixin, View):
 class PostDeleteView(LoginRequiredMixin, View):
     
     def setup(self, request, *args, **kwargs):
-        self.post = PostModel.objects.get(pk=kwargs['post_id'])
+        self.post = get_object_or_404(PostModel, pk=kwargs['post_id'])
+        # self.post = PostModel.objects.get(pk=kwargs['post_id'])
         return super().setup(request, *args, **kwargs)
     
     
@@ -58,7 +60,7 @@ class PostDeleteView(LoginRequiredMixin, View):
 class UpdatePostView(LoginRequiredMixin, View):
     
     def setup(self, request, *args, **kwargs):
-        self.post_instance = PostModel.objects.get(pk=kwargs['post_id'])
+        self.post_instance = get_object_or_404(PostModel, pk=kwargs['post_id'])
         return super().setup(request, *args, **kwargs)
     
     def dispatch(self, request, *args, **kwargs):
@@ -92,7 +94,8 @@ class UpdatePostView(LoginRequiredMixin, View):
 class PostCreateView(LoginRequiredMixin, View):
     
     def setup(self, request, *args, **kwargs):
-        self.user = User.objects.get(pk=kwargs['user_id'])
+        self.user = get_object_or_404(User, pk=kwargs['user_id'])
+        # self.user = User.objects.get(pk=kwargs['user_id'])
         return super().setup(request, *args, **kwargs)
     
     def dispatch(self, request, *args, **kwargs):

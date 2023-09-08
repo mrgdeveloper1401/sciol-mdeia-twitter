@@ -9,6 +9,8 @@
         {% csrf_token %}
         {{ form }}
         <input type='submit' value='login' class='btn btn-primary'>
-    </form>
+    </form> 
+    <a href=''>forget password</a> </br> 
+    <a href='{% url "accounts:logup" %}'>i have accounts</a>
     {% comment %} <a href='{% url "accounts:login_mobile" %}' class='btn btn-info'>you can log in with email</a> {% endcomment %}
 {% endblock  %}

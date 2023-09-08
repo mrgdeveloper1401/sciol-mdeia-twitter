@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'core.apps.CoreConfig',
     'post.apps.PostConfig',
+    'api.apps.ApiConfig',
+    
     
     
     

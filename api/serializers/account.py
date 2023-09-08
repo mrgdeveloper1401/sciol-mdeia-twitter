@@ -6,16 +6,15 @@ class SignupSerializers(serializers.ModelSerializer):
     password2 = serializers.CharField(required=True)
     class Meta:
         model = User
-        fields = ('full_name', 'username', 'email', 'mobile_phone', 'password', 'password2')
-        extra_kwargs = {'password': {'write_only': True},
-        'password2': {'write_only': True},}
+        fields = ('full_name', 'username', 'email', 'mobile_phone', 'password')
+        extra_kwargs = {'password': {'write_only': True},}
         
     def create(self, validated_data):
         del validated_data['password2']
         return User.objects.create_user(**validated_data)
 
     def validate_username(self, value):
-        if value == 'admin' and value == 'root':
+        if value == 'admin' or value == 'root':
             return serializers.ValidationError('admin or root cant be username')
         return value
     
@@ -25,6 +24,6 @@ class SignupSerializers(serializers.ModelSerializer):
         return data
     
     def validate_email(self, value):
-        if 'admin' == value and 'root' == 'value':
+        if 'admin' == value or 'root' == value:
             raise serializers.ValidationError('admin or root cant be email')
         return value

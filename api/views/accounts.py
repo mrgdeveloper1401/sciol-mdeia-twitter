@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from api.serializers.account import SignupSerializers
 from rest_framework.views import APIView
 from accounts.models import User
+from rest_framework import status
 
 
 class SignUpApiView(APIView):
@@ -18,5 +19,5 @@ class SignUpApiView(APIView):
                 
                 
             # )
-            return Response(ser_data.data)
-        return Response(ser_data.errors)
+            return Response(ser_data.data, status=status.HTTP_201_CREATED)
+        return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)

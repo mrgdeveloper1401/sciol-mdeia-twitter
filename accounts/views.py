@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from post.models import PostModel
+from django.contrib.auth import views as auth_views
+from django.urls import reverse, reverse_lazy
 
 
 class UserSignupView(View):
@@ -81,3 +83,13 @@ class UserProfileView(View):
             
         }
         return render(request, 'accounts/profile.html', context)
+    
+
+class UserPasswordResetView(auth_views.PasswordResetView):
+    template_name = 'accounts/password_reset_form.html'
+    
+    # redirect to who is page
+    success_url = reverse_lazy('accounts:password_reset_done')
+    
+    # send content to email user
+    email_template_name = 'accounts/password_reset_email.html'

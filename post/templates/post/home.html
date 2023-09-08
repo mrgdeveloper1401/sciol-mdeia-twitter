@@ -18,7 +18,7 @@
 
     <section class='text-center'>
         {% for posts in post  %}
-                {{ posts.user }} </br>
+                <a href='{% url 'accounts:profile' posts.user.id %}'> {{ posts.user }} </a> </br>
                 <a href='{{ posts.get_absolute_url }}'>{{ posts.body }}</a> </br>
                 {{ posts.image }} </br>
                 {{ posts.video }} </br>

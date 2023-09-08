@@ -144,3 +144,12 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'accounts.authenticate.UsernameBaeckEnd',
 ]
+
+# google account
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'm.goodarzi606@gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = 'vbghqbjeeuicgrxo'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'sciol-media-twitter'

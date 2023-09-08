@@ -15,6 +15,7 @@ class HomeView(View):
     
     def get(self, request):
         post = PostModel.objects.all()
+        # post = PostModel.objects.order_by('-create_at')
         return render(request, self.template_name, {'post': post})
     
 

@@ -37,3 +37,6 @@ class PostModel(CreateModel, UpdateModel):
         verbose_name = _('post')
         verbose_name_plural = _('posts')
         db_table = 'post-model'
+        
+        # order in database and show web
+        ordering = ('-create_at', 'body', )

@@ -43,4 +43,4 @@ admin.site.unregister(Group)
 
 @admin.register(RelationUserModel)
 class RelationUserAdmin(admin.ModelAdmin):
-    list_display = ('from_user', 'to_user')
+    list_display = ('from_user', 'to_user', 'create_at')

@@ -1,7 +1,7 @@
 from typing import Any
 from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from .models import User
+from .models import User, RelationUserModel
 from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
@@ -85,11 +85,16 @@ class LogOutView(LoginRequiredMixin, View):
     
 class UserProfileView(View):
     def get(self, request, user_id):
+        is_following = False
         user = User.objects.get(pk=user_id)
         post = user.posts.all()
+        relation = RelationUserModel.objects.filter(from_user=request.user, to_user=user.id)
+        if relation.exists():
+            is_following = True
         context = {
             'user': user,
             'post': post,
+            'is_following': is_following
             
             
         }
@@ -125,10 +130,25 @@ class PasswordResetComplateView(auth_views.PasswordResetCompleteView):
     
 
 class UserFollowView(LoginRequiredMixin, View):
+    # template_name = 'accounts/follow.html'
     
     def get(self, request, *args, **kwargs):
-        from_user = User.objects.get()
+        user = User.objects.get(pk=kwargs['user_id'])
+        relation = RelationUserModel.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            messages.error(request, 'you follow this user', 'warning')
+        else:
+            RelationUserModel.objects.create(from_user=request.user, to_user=user)
+            messages.success(request, 'follow', 'success')
+        return redirect('accounts:profile', user.id)
+        # return render(request, self.template_name, {'from_user': user, 'to_user': relation})
     
     
 class UserUnfollowView(LoginRequiredMixin, View):
-    ...
+    def get(self, request, *args, **kwargs):
+        user = User.objects.get(pk=kwargs['user_id'])
+        relation = RelationUserModel.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            relation.delete()
+            messages.success(request, 'unfollow', 'success')
+        return redirect('accounts:profile', user.id)

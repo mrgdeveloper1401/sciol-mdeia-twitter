@@ -10,11 +10,20 @@
     email: {{ user.email }} </br>
     mobbile phone: {{ user.mobile_phone }} </br></br>
 
+
+    {% if request.user.id != user.id and not is_following %}
+        <a class='btn btn-primary' href='{% url "accounts:user_follow" user.id %}' >follow</a>
+    
+    {% elif request.user.id != user.id and is_following%}
+        <a class='btn btn-primary' href='{% url "accounts:user_unfollow" user.id %}' >unfollow</a>
+
+    {% endif %}
     <section class='text-center'>
         {% for all_post in post %}
             {{ all_post.body }} </br> </br>
         {% endfor %}
     </section>
+
 
 
 

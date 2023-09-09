@@ -56,3 +56,15 @@ class User(AbstractBaseUser, CreateModel, UpdateModel):
         verbose_name = _("user")
         verbose_name_plural = _("users")
         db_table = "users-model"
+        
+
+class RelationUserModel(CreateModel):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    
+    class Meta:
+        verbose_name = _('relation')
+        verbose_name_plural = _('relations')
+        db_table = 'relation-model'
+    def __str__(self) -> str:
+        return f'{self.from_user}  {self.to_user}'

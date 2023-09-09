@@ -114,3 +114,13 @@ class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 # show message after password reset
 class PasswordResetComplateView(auth_views.PasswordResetCompleteView):
     template_name = 'accounts/password_reset_complete.html'
+    
+
+class UserFollowView(LoginRequiredMixin, View):
+    
+    def get(self, request, *args, **kwargs):
+        from_user = User.objects.get()
+    
+    
+class UserUnfollowView(LoginRequiredMixin, View):
+    ...

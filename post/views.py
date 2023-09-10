@@ -23,14 +23,13 @@ class PostDetailsView(LoginRequiredMixin, View):
     
     def setup(self, request, *args, **kwargs):
         self.post = get_object_or_404(PostModel, pk=kwargs['post_id'], slug=kwargs['post_slug'])
-        # self.post = PostModel.objects.get(pk=kwargs['post_id'], slug=kwargs['post_slug'])
         return super().setup(request, *args, **kwargs)
     
     template_name = 'post/post_details.html'
     
     def get(self, request, *args, **kwargs):
         post = self.post
-        comment = post.pcomment.filter(is_reply=False)
+        comment = CommentModel.objects.filter(is_reply=True)
         context = {
             'post': post,
             'comment': comment,
@@ -128,3 +127,9 @@ class PostCreateView(LoginRequiredMixin, View):
             messages.success(request, 'create post', 'success')
             return redirect('post:home')
         return render(request, self.template_name, {'create': create})
+    
+
+# class CommentView(View):
+#     def get(self, request):
+#         comment = CommentModel.objects.filter(is_reply=True)
+#         return render(request, )

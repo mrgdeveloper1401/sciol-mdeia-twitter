@@ -16,7 +16,7 @@ class PostModel(CreateModel, UpdateModel):
     slug = models.SlugField(max_length=30)
     
     def __str__(self):
-        return f'{self.user} -- {self.slug}'
+        return f'{self.user} -- {self.body}'
     
     
     def get_absolute_url(self):
@@ -40,3 +40,20 @@ class PostModel(CreateModel, UpdateModel):
         
         # order in database and show web
         ordering = ('-create_at', 'body', )
+        
+
+class CommentModel(CreateModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ucomment')
+    post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='pcomment')
+    body = models.TextField(max_length=400)
+    is_reply = models.BooleanField(default=False)
+    reply = models.ForeignKey('self', on_delete=models.CASCADE, related_name='rcomment', blank=True, null=True)
+    
+    class Meta:
+        verbose_name = _('comment')
+        verbose_name_plural = _('comments')
+        db_table = 'comment-model'
+        ordering = ('-create_at', 'body', )
+        
+    def __str__(self) -> str:
+        return f'{self.user} {self.body[:30]}'

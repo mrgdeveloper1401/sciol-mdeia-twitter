@@ -24,7 +24,7 @@
                 {{ posts.video }} </br>
                 location: {{ posts.location }} </br>
                 create : {{ posts.create_at }} </br> 
-                update : {{ posts.update_at }} </br> </br>
+                {% comment %} update : {{ posts.update_at }} </br> </br> {% endcomment %}
         {% endfor %}
     </section>
 {% endblock  %}

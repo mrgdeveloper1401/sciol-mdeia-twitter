@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PostModel
+from .models import PostModel, CommentModel
 
 
 @admin.register(PostModel)
@@ -11,3 +11,12 @@ class PostModelAdmin(admin.ModelAdmin):
     list_filter = ('create_at', 'update_at')
     raw_id_fields = ('user', )
     list_display = ('user', 'location', 'id', 'create_at', 'update_at', 'body')
+    
+    
+@admin.register(CommentModel)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'body', 'create_at', 'is_reply')
+    list_filter = ('create_at', 'user')
+    search_fields = ('body', 'reply', )
+    raw_id_fields = ('user', )
+    

@@ -18,11 +18,13 @@
                 {{ post.image }} </br>
                 {{ post.video }} </br>
                 location: {{ post.location }} </br>
-                create : {{ post.create_at }} </br> </br>
-
+                create : {{ post.create_at }} </br> </br> 
+            
                 {% if request.user.id == post.user.id %}
                     <a class='btn btn-primary' href='{% url "post:delete_post" post.id %}'>delete post</a> 
                     <a class='btn btn-danger' href='{% url "post:update_post" post.id %}'>update post</a>
-                {% endif %}
+                {% endif %} </br> </br>
+                
+                {{ post.pcomment.user }}
     </section>
 {% endblock  %}

@@ -2,7 +2,7 @@ from typing import Any
 from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.views import View
-from .models import PostModel
+from .models import PostModel, CommentModel
 from accounts.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -30,8 +30,11 @@ class PostDetailsView(LoginRequiredMixin, View):
     
     def get(self, request, *args, **kwargs):
         post = self.post
+        comment = post.pcomment.filter(is_reply=False)
         context = {
             'post': post,
+            'comment': comment,
+            
             }
         return render(request, self.template_name, context)
     

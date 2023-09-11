@@ -13,16 +13,37 @@
     </setion>
 
     <section class='text-center'>
-                {{ post.user }} </br>
-                {{ post.body }}</br>
-                {{ post.image }} </br>
-                {{ post.video }} </br>
-                location: {{ post.location }} </br>
-                create : {{ post.create_at }} </br> </br>
+        {{ post.user }} </br>
+        {{ post.body }}</br>
+        {% comment %} {{ post.image }} </br> {% endcomment %}
+        {% comment %} {{ post.video }} </br> {% endcomment %}
+        location: {{ post.location }} </br>
+        create : {{ post.create_at }} </br> </br> 
+            
+        {% if request.user.id == post.user.id %}
+        <a class='btn btn-primary' href='{% url "post:delete_post" post.id %}'>delete post</a> 
+        <a class='btn btn-danger' href='{% url "post:update_post" post.id %}'>update post</a>
+        {% endif %} <hr>
 
-                {% if request.user.id == post.user.id %}
-                    <a class='btn btn-primary' href='{% url "post:delete_post" post.id %}'>delete post</a> 
-                    <a class='btn btn-danger' href='{% url "post:update_post" post.id %}'>update post</a>
-                {% endif %}
+            
+        {% if request.user.is_authenticated %}
+            <form action='' method='post'>
+                {% csrf_token %}
+                {{ comment_form.as_div }}
+                <input type='submit' class='btn btn-primary' value='create comment'>
+            </form>
+        {% else %}
+            <p class='btn btn-danger'>you must login and create comment</p>
+        {% endif %}
+
+        {% for comments in comment %}
+        {{ comments.user }} </br>
+        {{ comments.ucomment.full_name }}
+        {{ comments.body }} <br>
+        {{ comments.create_at | timesince }} <hr/>
+        
+        {% empty %}
+            <p>no comments yet</p>
+        {% endfor %}
     </section>
 {% endblock  %}

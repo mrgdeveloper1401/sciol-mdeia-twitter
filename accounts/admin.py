@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
-from .models import User
+from .models import User, RelationUserModel
 from .form import UserChangeForms, UserCreationForms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -39,3 +39,8 @@ class UsersAdmin(UserAdmin):
     filter_horizontal = []
     
 admin.site.unregister(Group)
+
+
+@admin.register(RelationUserModel)
+class RelationUserAdmin(admin.ModelAdmin):
+    list_display = ('from_user', 'to_user', 'create_at')

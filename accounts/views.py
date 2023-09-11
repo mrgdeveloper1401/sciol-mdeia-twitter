@@ -1,5 +1,7 @@
+from typing import Any
+from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from .models import User
+from .models import User, RelationUserModel
 from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
@@ -37,6 +39,10 @@ class UserSignupView(View):
 
 
 class SignInView(View):
+
+    def setup(self, request, *args, **kwargs):
+        self.next = request.GET.get('next', None)
+        return super().setup(request, *args, **kwargs)
     
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -64,6 +70,8 @@ class SignInView(View):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'Login successful', 'success')
+                if self.next:
+                    return redirect(self.next)
                 return redirect('post:home')
             messages.error(request, 'username or password is wrong', 'warning')
         return render(request, self.template_name, {'form': signin})
@@ -77,11 +85,16 @@ class LogOutView(LoginRequiredMixin, View):
     
 class UserProfileView(View):
     def get(self, request, user_id):
+        is_following = False
         user = User.objects.get(pk=user_id)
         post = user.posts.all()
+        relation = RelationUserModel.objects.filter(from_user=request.user, to_user=user.id)
+        if relation.exists():
+            is_following = True
         context = {
             'user': user,
             'post': post,
+            'is_following': is_following
             
             
         }
@@ -114,3 +127,28 @@ class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 # show message after password reset
 class PasswordResetComplateView(auth_views.PasswordResetCompleteView):
     template_name = 'accounts/password_reset_complete.html'
+    
+
+class UserFollowView(LoginRequiredMixin, View):
+    # template_name = 'accounts/follow.html'
+    
+    def get(self, request, *args, **kwargs):
+        user = User.objects.get(pk=kwargs['user_id'])
+        relation = RelationUserModel.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            messages.error(request, 'you follow this user', 'warning')
+        else:
+            RelationUserModel.objects.create(from_user=request.user, to_user=user)
+            messages.success(request, 'follow', 'success')
+        return redirect('accounts:profile', user.id)
+        # return render(request, self.template_name, {'from_user': user, 'to_user': relation})
+    
+    
+class UserUnfollowView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        user = User.objects.get(pk=kwargs['user_id'])
+        relation = RelationUserModel.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            relation.delete()
+            messages.success(request, 'unfollow', 'success')
+        return redirect('accounts:profile', user.id)

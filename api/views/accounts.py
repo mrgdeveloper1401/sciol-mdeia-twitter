@@ -20,6 +20,13 @@ class SignUpApiView(APIView):
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-class RelationUserApiView(APIView):
+class FollowUserApiView(APIView):
     def get(self, request):
         ...
+        
+
+class UnfollowUserApiView(APIView):
+    def get(self, request):
+        ...
+        
+        

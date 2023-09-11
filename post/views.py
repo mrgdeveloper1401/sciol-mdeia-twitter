@@ -8,6 +8,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from .forms import PostCreateUpdateForm, CommentForm
 from django.utils.text import slugify
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 class HomeView(View):
@@ -39,6 +41,7 @@ class PostDetailsView(LoginRequiredMixin, View):
             'comment_form': comment_form,}
         return render(request, self.template_name, context)
     
+    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         comment_form = self.form_class(request.POST)
         if comment_form.is_valid():
@@ -49,6 +52,7 @@ class PostDetailsView(LoginRequiredMixin, View):
             messages.success(request, 'Comment created', 'success')
             return redirect('post:post_details', self.post_instance.id, self.post_instance.slug)
         return render(request, self.template_name)
+
 
 class PostDeleteView(LoginRequiredMixin, View):
     
@@ -71,6 +75,7 @@ class PostDeleteView(LoginRequiredMixin, View):
             messages.error(request, 'Dont delete post', 'warning')
             
         return render(request, '', context)
+
     
 class UpdatePostView(LoginRequiredMixin, View):
     
@@ -104,7 +109,7 @@ class UpdatePostView(LoginRequiredMixin, View):
             messages.success(request, 'Update Success', 'success')
             return redirect('post:post_details', post.id, post.slug)
         return render(request, self.template_name, {'update': update})
-    
+
     
 class PostCreateView(LoginRequiredMixin, View):
     

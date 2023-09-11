@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User
+from accounts.models import User, RelationUserModel
 
 
 class SignupSerializers(serializers.ModelSerializer):
@@ -23,3 +23,13 @@ class SignupSerializers(serializers.ModelSerializer):
         if data['password'] != data['password2']:
             raise serializers.ValidationError('password must be same')
         return data
+    
+    def create(self, validated_data):
+        return super().create(validated_data)
+class RelationserializerUser(serializers.ModelSerializer):
+    class Meta:
+        model = RelationUserModel
+        fields = ('from_user', 'to_user',)
+
+    
+    

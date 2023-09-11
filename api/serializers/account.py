@@ -3,10 +3,10 @@ from accounts.models import User
 
 
 class SignupSerializers(serializers.ModelSerializer):
-    # password2 = serializers.CharField(required=True)
+    password2 = serializers.CharField(required=True, write_only=True)
     class Meta:
         model = User
-        fields = ('full_name', 'username', 'email', 'mobile_phone', 'password')
+        fields = ('full_name', 'username', 'email', 'mobile_phone', 'password', 'password2')
         extra_kwargs = {
             'password': {'write_only': True},
             
@@ -19,8 +19,7 @@ class SignupSerializers(serializers.ModelSerializer):
             raise serializers.ValidationError('username dont be root')
         return value
     
-    # def validate(self, data):
-    #     if data['password'] != data['password2']:
-    #         raise serializers.ValidationError('password must mach')
-    #     return data
-    
+    def validate(self, data):
+        if data['password'] != data['password2']:
+            raise serializers.ValidationError('password must be same')
+        return data

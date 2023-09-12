@@ -5,12 +5,19 @@
 {% endblock  %}
 
 {% block content %}
-    <form action='' method='post' novalidate>
-        {% csrf_token %}
-        {{ form }}
-        <input type='submit' value='login' class='btn btn-primary'>
-    </form> 
-    <a href='{% url "accounts:password_reset" %}'>forget password</a> </br> 
-    <a href='{% url "accounts:logup" %}'>i have accounts</a>
-    {% comment %} <a href='{% url "accounts:login_mobile" %}' class='btn btn-info'>you can log in with email</a> {% endcomment %}
+    <section class='text-center'>
+        <form action='' method='post' novalidate class='m-2'>
+            {% csrf_token %}
+            {{ form }}
+            <input type='submit' value='login' class='btn btn-primary'>
+        </form> 
+
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item"><a href="{% url "accounts:password_reset" %}">forget password</a></li>
+              <li class="breadcrumb-item"><a href="{% url "accounts:logup" %}">create account</a></li>
+              <li class="breadcrumb-item"><a href="{% url "post:home" %}">Home</a></li>
+            </ol>
+          </nav>
+    </section>
 {% endblock  %}

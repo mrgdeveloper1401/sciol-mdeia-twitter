@@ -8,7 +8,7 @@ from django.urls import reverse
 
 class PostModel(CreateModel, UpdateModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='posts')
-    body = models.TextField(help_text='Please write caption')
+    body = models.TextField(max_length=500)
     image = models.ImageField(upload_to='posts',blank=True, null=True, help_text='Please upload your image')
     video = models.FileField(upload_to='post/video', blank=True, null=True, help_text='please upload your video')
     location = models.CharField(max_length=730, blank=True, null=True,

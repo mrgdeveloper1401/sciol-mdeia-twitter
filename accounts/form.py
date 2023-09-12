@@ -110,16 +110,16 @@ class UserSignUpForm(forms.ModelForm):
            raise ValidationError('this username is already in exisits')
         return cd['username']
         
-# class UserSignIn(forms.Form):
-#     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username or email'}))
-#     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'enter password'}))
+class UserSignIn(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username or email'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'enter password'}))
 
-class UserSignIn(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('username', 'password')
+# class UserSignIn(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ('username', 'password')
     
-    widgets = {
-        'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username or email'}),
-        'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'enter your password'})
-    }
+#     widgets = {
+#         'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username or email'}),
+#         'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'enter your password'})
+#     }

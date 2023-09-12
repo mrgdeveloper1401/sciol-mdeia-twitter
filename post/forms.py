@@ -8,6 +8,10 @@ class PostCreateUpdateForm(forms.ModelForm):
         model = PostModel
         fields = ('body', )
         
+        widgets = {
+            'body': forms.Textarea(attrs={'class': 'form-control w-75', 'placeholder': 'enetr text'})
+            }
+
 # class PostCreateform(forms.ModelForm):
 #     class Meta:
 #         model = PostModel

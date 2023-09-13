@@ -42,6 +42,11 @@ class PostModel(CreateModel, UpdateModel):
         ordering = ('-create_at', 'body', )
         
 
+class RecyclePost(PostModel):
+    class Meta:
+        proxy = True
+
+
 class CommentModel(CreateModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ucomment')
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='pcomment')
@@ -57,3 +62,8 @@ class CommentModel(CreateModel):
         
     def __str__(self) -> str:
         return f'{self.user} {self.body[:30]}'
+    
+
+class RecycleComment(CommentModel):
+    class Meta:
+        proxy = True

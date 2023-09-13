@@ -4,10 +4,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from .managers import MyManager
-from core.models import CreateModel, UpdateModel
+from core.models import CreateModel, UpdateModel, DeleteModel
 
 
-class User(AbstractBaseUser, CreateModel):
+class User(AbstractBaseUser, CreateModel, DeleteModel):
     username = models.CharField(_("Username"), max_length=100, unique=True)
     email = models.EmailField(_("Email"), max_length=255, unique=True)
     full_name = models.CharField(_("Full name"), max_length=255)
@@ -51,12 +51,22 @@ class User(AbstractBaseUser, CreateModel):
     def get_absolute_url(self):
         return reverse("model_detail", kwargs={"pk": self.pk})
     
+    def delete(self, using=None, keep_parents=False):
+        self.is_deleted = True
+        self.deleted_at = timezone.now()
+        self.save()
     
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
         db_table = "users-model"
         
+        
+class RecycleUser(User):
+    deleted = MyManager()
+    class Meta:
+        proxy = True
+
 
 class RelationUserModel(CreateModel):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')

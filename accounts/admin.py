@@ -1,7 +1,10 @@
+from typing import Any
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
-from .models import User, RelationUserModel
+from django.db.models.query import QuerySet
+from django.http.request import HttpRequest
+from .models import User, RelationUserModel, RecycleUser
 from .form import UserChangeForms, UserCreationForms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -9,6 +12,14 @@ from django.contrib.auth.forms import AdminPasswordChangeForm
 
 
 
+@admin.register(RecycleUser)
+class RecycleUserAdmin(admin.ModelAdmin):
+    # list_display = ['id', 'email', 'username', 'full_name', 'mobile_phone', 'is_admin', 'is_active', 'is_superuser']
+    
+    # def get_queryset(self, request):
+    #     return RecycleUser.deleted.filter(is_delted=True)
+    ...
+    
 @admin.register(User)
 class UsersAdmin(UserAdmin):
     form = UserChangeForms

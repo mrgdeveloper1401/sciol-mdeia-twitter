@@ -8,10 +8,12 @@
     <div class='card'>
         <h5 class='card-header'>{{ post_user.user }} | {{ post_user.create_at }}</h5>
         <p class='card-body'>{{ post_user.body }}</p>
-            <div class='card'>
+            <div class='card bg-dark text-white'>
                 {% for c in comment %}
-                    <h5 class='card-header'>{{ c.user }}</h5>
+                    <h5 class='card-header'>{{ c.user }} | {{ c.create_at }}</h5>
                     <p class='card-body'>{{ c.body }}</p>
+                {% empty %}
+                    <p>no comment yet</p>
                 {% endfor %}
             </div>
     </div>

@@ -5,26 +5,26 @@
 {% endblock  %}
 
 {% block content %}
-    {% comment %} <section class='text-center mb-5'>
-        <form method='post' action='' >
-            {% csrf_token %}
-            {{ create.as_p }}
-        </form>
-    </section> {% endcomment %}
 
-    {% if request.user.is_authenticated %}
+    {% if user.is_authenticated %}
         <a href='{% url "post:post_create" request.user.id %}'>create post</a>
     {% endif %}
 
-    <section class='text-center'>
+    <section>
         {% for posts in post  %}
-                <a href='{% url 'accounts:profile' posts.user.id %}'> {{ posts.user }} </a> </br>
-                <a href='{{ posts.get_absolute_url }}'>{{ posts.body }}</a> </br>
-                {{ posts.image }} </br>
-                {{ posts.video }} </br>
-                location: {{ posts.location }} </br>
-                create : {{ posts.create_at }} </br> 
-                {% comment %} update : {{ posts.update_at }} </br> </br> {% endcomment %}
+        <div class="card">
+            <h5 class="card-header"><a href='{% url 'accounts:profile' posts.user.id %}'> {{ posts.user }} </a> </br></h5>
+            <div class="card-body">
+              {% comment %} <h5 class="card-title">Special title treatment</h5> {% endcomment %}
+              <p class="card-text"><a href='{{ posts.get_absolute_url }}'>{{ posts.body }}</a> </br></p>
+              {% if posts.user.id == request.user.id %}
+                <a href="{% url "post:update_post" posts.id %}" class="btn btn-primary">update post</a>
+                <a href='{% url "post:delete_post" posts.id %}' class='btn btn-danger'>delete post</a>
+              
+              {% endif %}
+            </div>
+          </div>
         {% endfor %}
     </section>
+
 {% endblock  %}

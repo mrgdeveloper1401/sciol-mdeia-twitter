@@ -114,12 +114,12 @@ class UserSignIn(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username or email'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'enter password'}))
 
-# class UserSignIn(AuthenticationForm):
-#     ...
-    
-# class UserSigninMobileForm(forms.ModelForm):
-#     code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter code'}))
-
+# class UserSignIn(forms.ModelForm):
 #     class Meta:
 #         model = User
-#         fields = ('mobile_phone', 'code')
+#         fields = ('username', 'password')
+    
+#     widgets = {
+#         'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username or email'}),
+#         'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'enter your password'})
+#     }

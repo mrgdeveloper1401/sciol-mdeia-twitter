@@ -1,6 +1,10 @@
 from django.contrib import admin
-from .models import PostModel, CommentModel
+from .models import PostModel, CommentModel, RecyclePost, RecycleComment
 
+
+@admin.register(RecyclePost)
+class RecyclePostAdmin(admin.ModelAdmin):
+    ...
 
 @admin.register(PostModel)
 class PostModelAdmin(admin.ModelAdmin):
@@ -13,6 +17,11 @@ class PostModelAdmin(admin.ModelAdmin):
     list_display = ('user', 'location', 'id', 'create_at', 'update_at', 'body')
     
     
+    
+@admin.register(RecycleComment)
+class RecycleCommentAdmin(admin.ModelAdmin):
+    ...
+
 @admin.register(CommentModel)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('user', 'body', 'create_at', 'is_reply')

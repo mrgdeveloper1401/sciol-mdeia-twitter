@@ -8,7 +8,7 @@
     <section class='text-center mb-5'>
         <form method='post' action='' novalidate>
             {% csrf_token %}
-            {{ create.as_p }}
+            {{ create }}
             <input type='submit' value='create' class='btn btn-primary'>
         </form>
     </section>

@@ -7,14 +7,14 @@ from .managers import MyManager
 from core.models import CreateModel, UpdateModel
 
 
-class User(AbstractBaseUser, CreateModel, UpdateModel):
+class User(AbstractBaseUser, CreateModel):
     username = models.CharField(_("Username"), max_length=100, unique=True)
     email = models.EmailField(_("Email"), max_length=255, unique=True)
     full_name = models.CharField(_("Full name"), max_length=255)
     mobile_phone = models.CharField(_("Mobile"), max_length=11, unique=True)
     birthday = models.DateField(_("Birthday"), auto_now=timezone.now())
-    profile_image = models.ImageField(_("Profile"), upload_to = 'images/profile')
-    banner_image = models.ImageField(_("Profile"), upload_to = 'images/banner_profile')
+    # profile_image = models.ImageField(_("Profile"), upload_to = 'images/profile')
+    # banner_image = models.ImageField(_("Profile"), upload_to = 'images/banner_profile')
     is_admin = models.BooleanField(_("is admin"), default=False)
     is_active = models.BooleanField(_("is active"), default=True)
     is_superuser = models.BooleanField(_("is superuser"), default=False)

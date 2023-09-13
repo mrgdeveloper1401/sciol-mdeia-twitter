@@ -14,19 +14,18 @@ class UsersAdmin(UserAdmin):
     form = UserChangeForms
     add_form = UserCreationForms
     
-    list_display = ['username', 'email', 'id', 'full_name', 'mobile_phone', 'is_admin', 'is_active']
-    list_filter = ['is_admin', 'is_active']
+    list_display = ['id', 'email', 'username', 'full_name', 'mobile_phone', 'is_admin', 'is_active', 'is_superuser']
+    list_filter = ['is_admin', 'is_active', 'is_superuser']
     search_fields = ['username', 'email']
     ordering = ['username', 'create_at']
-    
+    readonly_fields = ('create_at',)
     list_display_links = ('username', 'email', 'mobile_phone')
-    readonly_fields = ('update_at', )
     
     fieldsets = (
-        ('authenticate', {'fields': ('username', 'password')}),
-        (('persolan info'), {'fields': ('full_name','email', 'mobile_phone', 'gender_choose')}),
+        ('authenticate', {'fields': ('email', 'password')}),
+        (('persolan info'), {'fields': ('full_name','username', 'mobile_phone', 'gender_choose')}),
         (('permissions', {'fields': ('is_admin','is_superuser', 'is_active' )})),
-        (('important date', {'fields': ('last_login', 'update_at', )})),
+        (('important date', {'fields': ('last_login','create_at')})),
         
         
     )

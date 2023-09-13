@@ -17,8 +17,12 @@ class HomeView(View):
     
     def get(self, request):
         post = PostModel.objects.all()
-        # post = PostModel.objects.order_by('-create_at')
-        return render(request, self.template_name, {'post': post})
+        # comments = post.pcomment.all()
+        context = {
+            'post': post,
+            # 'comments': comments
+        }
+        return render(request, self.template_name, context)
     
 
 class PostDetailsView(LoginRequiredMixin, View):
@@ -29,29 +33,21 @@ class PostDetailsView(LoginRequiredMixin, View):
         return super().setup(request, *args, **kwargs)
     
     template_name = 'post/post_details.html'
-    
     form_class = CommentForm
-    def get(self, request, *args, **kwargs):
-        post = self.post_instance
-        comment_form = self.form_class()
-        comment = CommentModel.objects.filter(is_reply=True)
-        context = {
-            'post': post,
-            'comment': comment,
-            'comment_form': comment_form,}
-        return render(request, self.template_name, context)
     
-    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        post_user = self.post_instance
+        comment = post_user.pcomment.all()
+        
+        context = {
+            'post_user': post_user,
+            'comment': comment
+            
+        }
+        return render(request, self.template_name, context)
+        
     def post(self, request, *args, **kwargs):
-        comment_form = self.form_class(request.POST)
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.user = request.user
-            new_comment.post = self.post_instance
-            new_comment.save()
-            messages.success(request, 'Comment created', 'success')
-            return redirect('post:post_details', self.post_instance.id, self.post_instance.slug)
-        return render(request, self.template_name)
+        pass
 
 
 class PostDeleteView(LoginRequiredMixin, View):

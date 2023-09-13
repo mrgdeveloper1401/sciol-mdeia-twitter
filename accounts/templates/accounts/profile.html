@@ -18,11 +18,7 @@
         <a class='btn btn-primary' href='{% url "accounts:user_unfollow" user.id %}' >unfollow</a>
 
     {% endif %}
-    <section class='text-center'>
-        {% for all_post in post %}
-            {{ all_post.body }} </br> </br>
-        {% endfor %}
-    </section>
+
 
 
 

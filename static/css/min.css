@@ -1,0 +1,27 @@
+a {
+    text-decoration: none;
+    color: black;
+    transition: all .2s ease-in-out;
+}
+
+a:hover {
+    color: gray;
+}
+
+.comment-post {
+    /* background-color: black; */
+    /* color: white; */
+    padding: 3rem 0;
+    /* border-radius: .2rem; */
+    margin-left: 2rem;
+}
+
+.post-home {
+    color: gray;
+}
+
+.btn-home-create-post{
+    display: block;
+    text-align: center;
+    margin: 3rem 0;
+}

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}
     <title>Home</title>
 {% endblock  %}
@@ -7,16 +9,17 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-        <a href='{% url "post:post_create" request.user.id %}'>create post</a>
+        <a class='btn-home-create-post' href='{% url "post:post_create" request.user.id %}'>for create post this here</a>
     {% endif %}
 
     <section>
         {% for posts in post  %}
         <div class="card">
-            <h5 class="card-header"><a href='{% url 'accounts:profile' posts.user.id %}'> {{ posts.user }} </a> </br></h5>
+            <h5 class="card-header text-center"><a href='{% url 'accounts:profile' posts.user.id %}'> {{ posts.user }} </a> </br></h5>
             <div class="card-body">
-              {% comment %} <h5 class="card-title">Special title treatment</h5> {% endcomment %}
-              <p class="card-text"><a href='{{ posts.get_absolute_url }}'>{{ posts.body }}</a> </br></p>
+              <p class="post-home"><a href='{{ posts.get_absolute_url }}'>{{ posts.body }}</a> </br></p> <hr>
+
+              </br>
               {% if posts.user.id == request.user.id %}
                 <a href="{% url "post:update_post" posts.id %}" class="btn btn-primary">update post</a>
                 <a href='{% url "post:delete_post" posts.id %}' class='btn btn-danger'>delete post</a>

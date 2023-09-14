@@ -51,8 +51,8 @@ class CommentModel(CreateModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ucomment')
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='pcomment')
     body = models.TextField(max_length=400)
-    is_reply = models.BooleanField(default=False)
     reply = models.ForeignKey('self', on_delete=models.CASCADE, related_name='rcomment', blank=True, null=True)
+    is_reply = models.BooleanField(default=True)
     
     class Meta:
         verbose_name = _('comment')
@@ -61,7 +61,7 @@ class CommentModel(CreateModel):
         ordering = ('-create_at', 'body', )
         
     def __str__(self) -> str:
-        return f'{self.user} {self.body[:30]}'
+        return f'{self.user} - {self.body[:30]}'
     
 
 class RecycleComment(CommentModel):

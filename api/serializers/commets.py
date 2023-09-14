@@ -5,4 +5,4 @@ from post.models import CommentModel
 class CommentsCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentModel
-        fields = ('body', )
+        fields = '__all__'

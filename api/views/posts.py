@@ -1,8 +1,34 @@
 from rest_framework.views import APIView
-from serializers.posts import PostCreateSerializer
+from api.serializers.posts import PostCreateSerializer
+from post.models import PostModel
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 
-class PostCreateApiView(APIView):
-    def post(self, request):
-        ser_data = PostCreateSerializer(data=request.data)
+class PostGetApiView(APIView):
+    def get(self, request):
+        post = PostModel.objects.all()
+        ser_data = PostCreateSerializer(instance=post, many=True)
+        return Response(ser_data.data, status=status.HTTP_200_OK)
         
+        
+class PostCreateApiView(APIView):
+    permission_classes = (IsAuthenticated,)
+    
+    def post(self, request):
+        ser_data = PostCreateSerializer(data=request.data, many=True)
+        if ser_data.is_valid():
+            ser_data.save()
+            return Response(ser_data.data, status=status.HTTP_201_CREATED)
+        return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class PostUpdateApiView(APIView):
+    def put(self, request):
+        ...
+        
+
+class PostDeleteApiview(APIView):
+    def delete(self, request):
+        ...

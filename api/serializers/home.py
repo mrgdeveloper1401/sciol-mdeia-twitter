@@ -5,4 +5,4 @@ from post.models import PostModel
 class HomeSerializers(serializers.ModelSerializer):
     class Meta:
         model = PostModel
-        fields = ('user', 'body', 'location')
+        fields = '__all__'

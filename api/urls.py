@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views.accounts import SignUpApiView
+from api.views.accounts import SignUpApiView, ProfileApiView
 from api.views.comments import *
 from api.views.home import HomeView
 from rest_framework.authtoken import views as auth_views
@@ -9,6 +9,7 @@ from api.views.posts import *
 app_name = 'api'
 urlpatterns = [
     path('signup/', SignUpApiView.as_view(), name='signup_api'),
+    path('profile/<int:user_id>/', ProfileApiView.as_view(), name='profile'),
     path('auth-token/', auth_views.obtain_auth_token, name='auth_token'),
     path('home/', HomeView.as_view(), name='home'),
     path('create-posts/', PostCreateApiView.as_view(), name='post_create'),

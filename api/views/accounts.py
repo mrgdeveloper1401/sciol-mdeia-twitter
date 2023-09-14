@@ -26,7 +26,7 @@ class ProfileApiView(APIView):
     
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        ser_data = ProfileSerializers(instance=user, many=True)
+        ser_data = ProfileSerializers(instance=user)
         return Response(ser_data.data, status=status.HTTP_200_OK)
 
 

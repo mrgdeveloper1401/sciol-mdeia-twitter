@@ -17,8 +17,8 @@ urlpatterns = [
     path('delete-posts/<int:post_id>/', PostDeleteApiview.as_view(), name='update-post'),
     path('create-comments/', CommentsCreateApiView.as_view(), name='comment_create_api'),
     path('show-comments/', CommetsGetApiView.as_view(), name='comment_create_api'),
-    path('update-comments/', CommetsUpdateApiView.as_view(), name='update_comments'),
-    path('delete-comments/', CommetsDeleteApiView.as_view(), name='delete-comments'),
+    path('update-comments/<int:comment_id>/', CommetsUpdateApiView.as_view(), name='update_comments'),
+    path('delete-comments/<int:comment_id>/', CommetsDeleteApiView.as_view(), name='delete-comments'),
     
     
     

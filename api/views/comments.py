@@ -14,7 +14,7 @@ class CommetsGetApiView(APIView):
         
 class CommentsCreateApiView(APIView):
     def post(self, request):
-        ser_data = CommentsCreateSerializer(data=request.data, many=True)
+        ser_data = CommentsCreateSerializer(data=request.data)
         if ser_data.is_valid():
             ser_data.save()
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
@@ -22,10 +22,18 @@ class CommentsCreateApiView(APIView):
         
         
 class CommetsUpdateApiView(APIView):
-    def put(self, request):
-        ...
+    def put(self, request, comment_id):
+        comment = CommentModel.objects.get(pk=comment_id)
+        ser_data = CommentsCreateSerializer(instance=comment, data=request.data, partial=True)
+        if ser_data.is_valid():
+            ser_data.save()
+            return Response({'message': 'successfly update comment'}, ser_data.data, status=status.HTTP_202_ACCEPTED)
+        return Response(ser_data.errors)
         
 class CommetsDeleteApiView(APIView):
-    def delete(self, request):
-        ...
+    def delete(self, request, comment_id):
+        comment = CommentModel.objects.get(pk=comment_id)
+        comment.delete()
+        return Response({'message': 'succesfly delete comment'}, status=status.HTTP_204_NO_CONTENT)
+    
         

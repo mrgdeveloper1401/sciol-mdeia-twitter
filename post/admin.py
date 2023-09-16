@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PostModel, CommentModel, RecyclePost, RecycleComment
+from .models import PostModel, CommentModel, RecyclePost, RecycleComment, RelationPostModel
 
 
 @admin.register(RecyclePost)
@@ -28,4 +28,8 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('create_at', 'user')
     search_fields = ('body', 'reply', )
     raw_id_fields = ('user', )
-    
+
+
+@admin.register(RelationPostModel)
+class RelationPostAdmin(admin.ModelAdmin):
+    list_display = ['post', 'like', 'dislike', 'create_at']

@@ -26,3 +26,8 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'body': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'type comment'}),
         }
+    
+    
+class PostSearchForms(forms.Form):
+    search = forms.CharField(label='search post')
+    

@@ -2,11 +2,11 @@ from typing import Any
 from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.views import View
-from .models import PostModel, CommentModel
+from .models import PostModel, CommentModel, RelationPostModel
 from accounts.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from .forms import PostCreateUpdateForm, CommentForm
+from .forms import PostCreateUpdateForm, CommentForm, PostSearchForms
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -14,13 +14,18 @@ from django.utils.decorators import method_decorator
 
 class HomeView(View):
     template_name = 'post/home.html'
+    from_class = PostSearchForms
     
     def get(self, request):
         post = PostModel.objects.all()
-        # comments = post.pcomment.all()
+        if request.GET.get('search'):
+            post = post.filter(body__contains=request.GET['search'])
+            
         context = {
             'post': post,
             # 'comments': comments
+            'search': self.from_class,
+            
         }
         return render(request, self.template_name, context)
     
@@ -146,3 +151,17 @@ class PostCreateView(LoginRequiredMixin, View):
 #     def get(self, request):
 #         comment = CommentModel.objects.filter(is_reply=True)
 #         return render(request, )
+
+
+class RelationPostLikeView(View):
+    def get(self, reqeust, *args, **kwargs):
+        post = get_object_or_404(PostModel, pk=kwargs['post_id'])
+        like = RelationPostModel.objects.filter(post=post, user=reqeust.user)
+        if like.exists():
+            messages.error(reqeust, 'you liked post', 'danger')
+            
+        RelationPostModel.objects.create(post=post, user=reqeust.user)
+        messages.success(reqeust, 'post like', 'success')
+class RelationPostDislikeView(View):
+    def get(self, reqeust, *args, **kwargs):
+        ...

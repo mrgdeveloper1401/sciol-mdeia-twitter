@@ -51,6 +51,7 @@ class SignInView(View):
     
     form_class = UserSignIn
     template_name = 'accounts/signin.html'
+    
     def get(self, request):
         signin = self.form_class()
         context = {

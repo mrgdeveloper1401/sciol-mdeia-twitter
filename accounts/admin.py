@@ -59,3 +59,4 @@ class RelationUserAdmin(admin.ModelAdmin):
 @admin.register(NotificationModel)
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ['user', 'body', 'create_at']
+    ordering = ('-create_at', )

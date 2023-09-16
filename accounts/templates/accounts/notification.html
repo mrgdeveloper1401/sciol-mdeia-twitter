@@ -9,12 +9,14 @@
 {% block content %}
     <section>
         {% for notifications in notification %}
-        <div class='card'>
-            <h6 class='card-header'>{{ notifications.user }}</h6>
-            <p class='card-body'>
-                {{ notifications.body }} </br> date: {{ notifications.create_at }}
-            </p>
-        </div>
+        {% if notifications.user.id == request.user.id %}
+            <div class='card'>
+                <h6 class='card-header'>{{ notifications.user }}</h6>
+                <p class='card-body'>
+                    {{ notifications.body }} </br> date: {{ notifications.create_at }}
+                </p>
+            </div>
+        {% endif %}
     </section>
         {% endfor %}
 {% endblock content %}

@@ -29,7 +29,13 @@ class SignupSerializers(serializers.ModelSerializer):
 class RelationserializerUser(serializers.ModelSerializer):
     class Meta:
         model = RelationUserModel
-        fields = ('from_user', 'to_user',)
+        fields = '__all__'
+        
+
+class ProfileSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 
     
     

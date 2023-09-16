@@ -24,7 +24,7 @@ class RecycleCommentAdmin(admin.ModelAdmin):
 
 @admin.register(CommentModel)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'body', 'create_at', 'is_reply')
+    list_display = ('id', 'user', 'body', 'create_at', 'is_reply')
     list_filter = ('create_at', 'user')
     search_fields = ('body', 'reply', )
     raw_id_fields = ('user', )

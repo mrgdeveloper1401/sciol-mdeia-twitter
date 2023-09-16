@@ -2,7 +2,7 @@ from typing import Any
 from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from .models import User, RelationUserModel
-from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm
+from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm, UserEditProfileForm
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -101,6 +101,37 @@ class UserProfileView(View):
         }
         return render(request, 'accounts/profile.html', context)
     
+    
+class EditProfileView(LoginRequiredMixin, View):
+    
+    def setup(self, request, *args, **kwargs):
+        self.user = get_object_or_404(User, pk=kwargs['user_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def dispatch(self, request, *args, **kwargs):
+        user = User.objects.get(pk=kwargs['user_id'])
+        if request.user.id != user.id:
+            messages.error(request, 'invalid', 'danger')
+            return redirect('post:home')
+        return super().dispatch(request, *args, **kwargs)
+    
+    template_name = 'accounts/edit-profile.html'
+    from_class = UserEditProfileForm
+    
+    def get(self, request, *args, **kwargs):
+        user = self.user
+        update_user = self.from_class(instance=user)
+        return render(request, self.template_name, {'user': update_user})
+        
+    def post(self, request, *args, **kwargs):
+        user = self.user
+        update_user = self.from_class(request.POST, instance=user)
+        if update_user.is_valid():
+            update_user.save()
+            messages.success(request, 'successfly edit profile', 'success')
+            return redirect('accounts:profile', request.user.id)
+        return render(request, self.template_name, {'user': update_user})
+        
 
 # show form reset password and send form reset password to email account
 class UserPasswordResetView(auth_views.PasswordResetView):

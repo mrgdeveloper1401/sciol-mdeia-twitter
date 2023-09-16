@@ -78,3 +78,5 @@ class RelationUserModel(CreateModel):
         db_table = 'relation-model'
     def __str__(self) -> str:
         return f'{self.from_user}  {self.to_user}'
+
+    

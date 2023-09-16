@@ -123,3 +123,9 @@ class UserSignIn(forms.Form):
 #         'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username or email'}),
 #         'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'enter your password'})
 #     }
+
+
+class UserEditProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'full_name', 'mobile_phone', 'gender_choose')

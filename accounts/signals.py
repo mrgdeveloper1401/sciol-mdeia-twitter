@@ -3,8 +3,10 @@ from django.dispatch import receiver
 from .models import User, NotificationModel
 
 
-def create_notification(sender, **kwargs):
-    if kwargs['created']:
-        NotificationModel.objects.create
-    
-post_save.connect(receiver=create_notification, sender=User)
+@receiver(signal=post_save, sender=User)
+def create_user_notification(sender, instance, created, **kwargs):
+    if created:
+        NotificationModel.objects.create(
+            user=instance,
+            body='successfly create account'
+        )

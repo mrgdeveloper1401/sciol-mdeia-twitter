@@ -1,7 +1,7 @@
 from typing import Any
 from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from .models import User, RelationUserModel
+from .models import User, RelationUserModel, NotificationModel
 from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm, UserEditProfileForm
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
@@ -188,5 +188,6 @@ class UserUnfollowView(LoginRequiredMixin, View):
 
 class NotifictionView(View):
     def get(self, request):
-        return render(request, 'accounts/notification.html')
+        notification = NotificationModel.objects.all()
+        return render(request, 'accounts/notification.html', {'notification': notification})
         

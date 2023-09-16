@@ -8,13 +8,15 @@
 
 {% block content %}
     <section>
+        {% for notifications in notification %}
         <div class='card'>
-            <h6 class='card-header'>{{ request.user.username }}</h6>
+            <h6 class='card-header'>{{ notifications.user }}</h6>
             <p class='card-body'>
-                test
+                {{ notifications.body }}
             </p>
         </div>
     </section>
+        {% endfor %}
 {% endblock content %}
     
     

@@ -82,3 +82,6 @@ class RelationPostModel(CreateModel):
         verbose_name = _('relation post')
         verbose_name_plural = _('relation posts')
         db_table = 'Relation-post-model'
+        
+
+    

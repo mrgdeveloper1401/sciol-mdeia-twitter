@@ -7,6 +7,11 @@
 {% endblock  %}
 
 {% block content %}
+  <form method=GET, action=''>
+    {{ search }}
+    <input type='submit' value='search' class='btn btn-primary'>
+  </form>
+
 
     {% if user.is_authenticated %}
         <a class='btn-home-create-post' href='{% url "post:post_create" request.user.id %}'>for create post this here</a>

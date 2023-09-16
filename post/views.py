@@ -6,7 +6,7 @@ from .models import PostModel, CommentModel, RelationPostModel
 from accounts.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from .forms import PostCreateUpdateForm, CommentForm
+from .forms import PostCreateUpdateForm, CommentForm, PostSearchForms
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -14,13 +14,18 @@ from django.utils.decorators import method_decorator
 
 class HomeView(View):
     template_name = 'post/home.html'
+    from_class = PostSearchForms
     
     def get(self, request):
         post = PostModel.objects.all()
-        # comments = post.pcomment.all()
+        if request.GET.get('search'):
+            post = post.filter(body__contains=request.GET['search'])
+            
         context = {
             'post': post,
             # 'comments': comments
+            'search': self.from_class,
+            
         }
         return render(request, self.template_name, context)
     

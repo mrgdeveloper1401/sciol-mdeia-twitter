@@ -79,4 +79,12 @@ class RelationUserModel(CreateModel):
     def __str__(self) -> str:
         return f'{self.from_user}  {self.to_user}'
 
+
+class NotificationModel(CreateModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Unotification')
+    body = models.TextField(_('body notification'))
     
+    class Meta:
+        verbose_name = _('notification-model')
+        verbose_name_plural = _('notifications-models')
+        db_table = 'notofication-model'

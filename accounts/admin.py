@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
-from .models import User, RelationUserModel, RecycleUser
+from .models import User, RelationUserModel, RecycleUser, NotificationModel
 from .form import UserChangeForms, UserCreationForms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -54,3 +54,8 @@ admin.site.unregister(Group)
 @admin.register(RelationUserModel)
 class RelationUserAdmin(admin.ModelAdmin):
     list_display = ('from_user', 'to_user', 'create_at')
+    
+
+@admin.register(NotificationModel)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'body', 'create_at']

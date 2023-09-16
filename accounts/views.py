@@ -184,3 +184,9 @@ class UserUnfollowView(LoginRequiredMixin, View):
             relation.delete()
             messages.success(request, 'unfollow', 'success')
         return redirect('accounts:profile', user.id)
+    
+
+class NotifictionView(View):
+    def get(self, request):
+        return render(request, 'accounts/notification.html')
+        

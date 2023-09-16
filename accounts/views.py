@@ -84,7 +84,7 @@ class LogOutView(LoginRequiredMixin, View):
         return redirect('accounts:login')
     
     
-class UserProfileView(View):
+class UserProfileView(LoginRequiredMixin,View):
     def get(self, request, user_id):
         is_following = False
         user = User.objects.get(pk=user_id)

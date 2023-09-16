@@ -7,3 +7,4 @@ class AccountsConfig(AppConfig):
 
     def ready(self):
         from .signals import create_user_notification
+        from .signals import update_profile_notification

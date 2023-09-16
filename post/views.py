@@ -2,7 +2,7 @@ from typing import Any
 from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.views import View
-from .models import PostModel, CommentModel
+from .models import PostModel, CommentModel, RelationPostModel
 from accounts.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -146,3 +146,17 @@ class PostCreateView(LoginRequiredMixin, View):
 #     def get(self, request):
 #         comment = CommentModel.objects.filter(is_reply=True)
 #         return render(request, )
+
+
+class RelationPostLikeView(View):
+    def get(self, reqeust, *args, **kwargs):
+        post = get_object_or_404(PostModel, pk=kwargs['post_id'])
+        like = RelationPostModel.objects.filter(post=post, user=reqeust.user)
+        if like.exists():
+            messages.error(reqeust, 'you liked post', 'danger')
+            
+        RelationPostModel.objects.create(post=post, user=reqeust.user)
+        messages.success(reqeust, 'post like', 'success')
+class RelationPostDislikeView(View):
+    def get(self, reqeust, *args, **kwargs):
+        ...

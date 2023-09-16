@@ -67,3 +67,18 @@ class CommentModel(CreateModel):
 class RecycleComment(CommentModel):
     class Meta:
         proxy = True
+        
+
+class RelationPostModel(CreateModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Urelation')
+    post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='Prelation')
+    like = models.BooleanField(default=None)
+    dislike = models.BooleanField(default=None)
+    
+    # def get_like(self):
+    #     return self.like.count()
+    
+    class Meta:
+        verbose_name = _('relation post')
+        verbose_name_plural = _('relation posts')
+        db_table = 'Relation-post-model'

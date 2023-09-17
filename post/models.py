@@ -16,6 +16,7 @@ class PostModel(CreateModel):
                                 help_text='You can write the location of this post')
     slug = models.SlugField(default='', null=False)
     is_active = models.BooleanField(default=True)
+    post_tag = models.ManyToManyField('TagPostModel')
     def save(self, *args, **kwargs):
         self.slug = slugify(self.body)
         super().save(*args, **kwargs)
@@ -80,4 +81,14 @@ class RelationPostModel(CreateModel):
         db_table = 'Relation-post-model'
         
 
+
+class TagPostModel(models.Model):
+    title = models.CharField(max_length=50)
     
+    
+    def __str__(self) -> str:
+        return self.title
+    class Meta:
+        verbose_name = 'tag post'
+        verbose_name_plural = 'tag posts'
+        db_table = 'tag-post-model'

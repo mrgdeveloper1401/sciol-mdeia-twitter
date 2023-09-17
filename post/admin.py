@@ -1,6 +1,10 @@
 from django.contrib import admin
-from .models import PostModel, CommentModel, RecyclePost, RecycleComment, RelationPostModel
+from .models import PostModel, CommentModel, RecyclePost, RecycleComment, RelationPostModel, TagPostModel
 
+
+@admin.register(TagPostModel)
+class TagPostAdmin(admin.ModelAdmin):
+    ...
 
 @admin.register(RecyclePost)
 class RecyclePostAdmin(admin.ModelAdmin):

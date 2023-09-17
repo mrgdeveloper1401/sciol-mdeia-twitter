@@ -30,6 +30,11 @@
                 <a href='{% url "post:delete_post" posts.id %}' class='btn btn-danger'>delete post</a>
               
               {% endif %}
+              <a href='#'>comment</a>
+              <a href='#'>like</a>
+              <a href='#'>dislike</a>
+              <span>create {{ posts.create_at }}</span>
+              <span>update {{ posts.update_at }}</span>
             </div>
           </div>
         {% endfor %}

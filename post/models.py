@@ -4,6 +4,7 @@ from django.utils import timezone
 from core.models import *
 from accounts.models import User
 from django.urls import reverse
+from django.utils.text import slugify
 
 
 class PostModel(CreateModel):
@@ -13,7 +14,11 @@ class PostModel(CreateModel):
     video = models.FileField(upload_to='post/video', blank=True, null=True, help_text='please upload your video')
     location = models.CharField(max_length=730, blank=True, null=True,
                                 help_text='You can write the location of this post')
-    slug = models.SlugField(max_length=30)
+    slug = models.SlugField(default='', null=False)
+    is_active = models.BooleanField(default=True)
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.body)
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f'{self.user} -- {self.body}'
@@ -21,17 +26,8 @@ class PostModel(CreateModel):
     
     def get_absolute_url(self):
         return reverse("post:post_details", args=(self.id, self.slug))
-    
-    class StatusPost(models.Model):
-        class StatusPosts(models.TextChoices):
-            Published = 'pb', 'published'
-            Rejected = 'rg', 'rejected'
 
-        choose_status = models.CharField(
-            max_length=2,
-            choices=StatusPosts.choices,
-            default=StatusPosts.Published
-        ) 
+
     
     class Meta:
         verbose_name = _('post')

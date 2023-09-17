@@ -88,7 +88,7 @@ class UserProfileView(LoginRequiredMixin,View):
     def get(self, request, user_id):
         is_following = False
         user = User.objects.get(pk=user_id)
-        post = user.posts.all()
+        post = PostModel.objects.all()
         relation = RelationUserModel.objects.filter(from_user=request.user, to_user=user.id)
         if relation.exists():
             is_following = True

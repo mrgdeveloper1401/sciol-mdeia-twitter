@@ -14,8 +14,8 @@ class PostModelAdmin(admin.ModelAdmin):
     search_fields = ('user', )
     list_filter = ('create_at',)
     raw_id_fields = ('user', )
-    list_display = ('user', 'location', 'id', 'create_at', 'body')
-    
+    list_display = ('user', 'location', 'id', 'create_at', 'body', 'is_active')
+    list_editable= ('is_active', )
     
     
 @admin.register(RecycleComment)

@@ -1,5 +1,5 @@
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import  timezone
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
@@ -7,23 +7,21 @@ from .managers import MyManager
 from core.models import CreateModel, UpdateModel, DeleteModel
 
 
-class User(AbstractBaseUser, CreateModel, DeleteModel):
+class User(AbstractBaseUser, CreateModel, UpdateModel):
     username = models.CharField(_("Username"), max_length=100, unique=True)
     email = models.EmailField(_("Email"), max_length=255, unique=True)
     full_name = models.CharField(_("Full name"), max_length=255)
     mobile_phone = models.CharField(_("Mobile"), max_length=11, unique=True)
-    birthday = models.DateField(_("Birthday"), auto_now=timezone.now())
-    # profile_image = models.ImageField(_("Profile"), upload_to = 'images/profile')
-    # banner_image = models.ImageField(_("Profile"), upload_to = 'images/banner_profile')
+    birthday = models.DateField(_("Birth day"), default=timezone.now)
     is_admin = models.BooleanField(_("is admin"), default=False)
     is_active = models.BooleanField(_("is active"), default=True)
     is_superuser = models.BooleanField(_("is superuser"), default=False)
     
     gender = (
-        ('male', 'male'),
-        ('female', 'female'),
+        ('1', 'male'),
+        ('2', 'female'),
     )
-    gender_choose = models.CharField(_("Gender"), max_length=6, choices=gender)
+    gender_choose = models.CharField(_("Gender"), max_length=1, choices=gender)
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['mobile_phone', 'full_name', 'username']
@@ -31,11 +29,11 @@ class User(AbstractBaseUser, CreateModel, DeleteModel):
     objects = MyManager()
     
     def has_perm(self, perm, obj=None):
-        if self.is_active and self.is_superuser:
+        # if self.is_active and self.is_superuser:
             return True
     
     def has_module_perms(self, app_labe):
-        if self.is_active and self.is_superuser:
+        # if self.is_active and self.is_superuser:
             return True
         
     def get_absolute_url(self):
@@ -61,6 +59,15 @@ class User(AbstractBaseUser, CreateModel, DeleteModel):
         verbose_name_plural = _("users")
         db_table = "users-model"
         
+        
+class Imageuser(CreateModel):
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    image = models.FileField(upload_to='profile')
+    
+    class Meta:
+        verbose_name = _('image user')
+        verbose_name_plural = _('image users')
+        db_table = 'image_user_model'
         
 class RecycleUser(User):
     deleted = MyManager()

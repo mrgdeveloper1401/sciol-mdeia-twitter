@@ -7,27 +7,21 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 
-class PostModel(CreateModel):
+class PostModel(CreateModel, UpdateModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='posts')
     body = models.TextField(max_length=500)
-    image = models.ImageField(upload_to='posts',blank=True, null=True, help_text='Please upload your image')
-    video = models.FileField(upload_to='post/video', blank=True, null=True, help_text='please upload your video')
-    location = models.CharField(max_length=730, blank=True, null=True,
-                                help_text='You can write the location of this post')
-    slug = models.SlugField(default='', null=False)
+    slug = models.SlugField()
     is_active = models.BooleanField(default=True)
-    post_tag = models.ManyToManyField('TagPostModel')
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.body)
-        super().save(*args, **kwargs)
+    post_tag = models.ManyToManyField('TagPostModel', blank=True, related_name='Ptag')
+    
+
     
     def __str__(self):
-        return f'{self.user} -- {self.body}'
+        return f'{self.user} -- {self.body}[:30]'
     
     
     def get_absolute_url(self):
         return reverse("post:post_details", args=(self.id, self.slug))
-
 
     
     class Meta:
@@ -39,12 +33,26 @@ class PostModel(CreateModel):
         ordering = ('-create_at', 'body', )
         
 
+class PostOptionModel(models.Model):
+    post = models.OneToOneField(PostModel, on_delete=models.PROTECT)
+    image = models.FileField(upload_to='post/image', null=True, blank=True)
+    video = models.FileField(upload_to='post/video', null=True, blank=True)
+
+    def __str__(self) -> str:
+        return str(self.post)[:30]
+    
+    class Meta:
+        verbose_name = _('PostOptionModel')
+        verbose_name_plural = _('PostOptionModels')
+        db_table = 'post-option-models'
+        
+        
 class RecyclePost(PostModel):
     class Meta:
         proxy = True
 
 
-class CommentModel(CreateModel):
+class CommentModel(CreateModel, UpdateModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ucomment')
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='pcomment')
     body = models.TextField(max_length=400)
@@ -60,7 +68,21 @@ class CommentModel(CreateModel):
     def __str__(self) -> str:
         return f'{self.user} - {self.body[:30]}'
     
-
+    
+class CommentsOptionModel(models.Model):
+    comment = models.OneToOneField(PostModel, on_delete=models.PROTECT)
+    image = models.FileField(upload_to='post/image', null=True, blank=True)
+    video = models.FileField(upload_to='post/video', null=True, blank=True)
+    
+    def __str__(self) -> str:
+        return str(self.comment)[:30]
+    
+    class Meta:
+        verbose_name = 'CommentOption'
+        verbose_name_plural = 'CommentOptions'
+        db_table = 'comment-option-model'
+        
+    
 class RecycleComment(CommentModel):
     class Meta:
         proxy = True
@@ -70,7 +92,6 @@ class RelationPostModel(CreateModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Urelation')
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='Prelation')
     like = models.BooleanField(default=None)
-    dislike = models.BooleanField(default=None)
     
     # def get_like(self):
     #     return self.like.count()

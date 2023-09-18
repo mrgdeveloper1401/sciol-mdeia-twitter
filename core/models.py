@@ -24,16 +24,16 @@ class UpdateModel(models.Model):
         
         
 class DeleteModel(models.Model):
-    deleted_at = models.DateTimeField(_('deleted_at'),null=True, editable=False, blank=True)
+    deleted_at = models.DateTimeField(_('deleted_at'), default=timezone ,null=True, editable=False, blank=True)
     is_deleted = models.BooleanField(_('is_deleted'), default=False, editable=False, null=True, blank=True)
 
-    class DeleteQuerySet(models.QuerySet):
-        def delete(self):
-            return self.update(is_deleted=True, deleted_at=timezone.now())
+    # class DeleteQuerySet(models.QuerySet):
+    #     def delete(self):
+    #         return self.update(is_deleted=True, deleted_at=timezone.now())
     
-    class DeleteManager(models.Manager):
-        def get_queryset(self):
-            return DeleteModel.DeleteQuerySet(self.model, self._db).filter(is_deleted=True)
+    # class DeleteManager(models.Manager):
+    #     def get_queryset(self):
+    #         return DeleteModel.DeleteQuerySet(self.model, self._db).filter(is_deleted=True)
         
     class Meta:
         verbose_name = _('delete_model')

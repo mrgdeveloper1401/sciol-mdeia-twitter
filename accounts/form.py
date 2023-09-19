@@ -68,13 +68,15 @@ class UserSignUpForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('mobile_phone', 'username', 'email', 'full_name')
+        fields = ('mobile_phone', 'username', 'email', 'full_name', 'birthday')
         
         widgets = {
             'mobile_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter phone number'}),
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'enter email address'}),
             'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter full name'}),
+            'birthday': forms.TextInput(attrs={'class': 'form-control'}),
+
         }
         
         labels = {
@@ -82,6 +84,7 @@ class UserSignUpForm(forms.ModelForm):
             'username': 'username',
             'email': 'email',
             'full_name': 'full name',
+            'birth_day': 'birth day',
 
         }
         

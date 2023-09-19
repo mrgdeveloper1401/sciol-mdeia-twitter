@@ -17,7 +17,7 @@ class HomeView(View):
     from_class = PostSearchForms
     
     def get(self, request):
-        post = PostModel.objects.filter(is_active=True)
+        post = PostModel.objects.filter(is_active=True)[:3]
         if request.GET.get('search'):
             post = post.filter(body__contains=request.GET['search'])
             

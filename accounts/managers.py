@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import make_password
 
 
 class MyManager(BaseUserManager):
-    def create_user(self, email,username, full_name,mobile_phone, password=None):
+    def create_user(self, email,username, full_name,mobile_phone, birthday, password=None):
         if not email:
             raise ValueError('Please provide an email address')
         if not username:
@@ -13,12 +13,15 @@ class MyManager(BaseUserManager):
         email = self.normalize_email(email)
         if not mobile_phone:
             raise ValueError('Please provide a mobile phone')
+        if not birthday:
+            raise ValueError('you must enter birth day')
         
         user = self.model(
             email=email,
             username=username,
             full_name=full_name,
             mobile_phone=mobile_phone,
+            birthday = birthday
             
             
             

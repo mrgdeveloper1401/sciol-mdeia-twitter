@@ -31,6 +31,7 @@ class UserSignupView(View):
                 email=cd['email'],
                 full_name = cd['full_name'],
                 password=cd['password'],
+                birthday = cd['birthday']
                 
             )
             messages.success(requests, 'successfully create account', 'success')

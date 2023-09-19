@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
-from .models import User, RelationUserModel, RecycleUser, NotificationModel, Imageuser
+from .models import User, RelationUserModel, RecycleUser, NotificationModel, Imageuser, OtpCode
 from .form import UserChangeForms, UserCreationForms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -64,4 +64,9 @@ class NotificationAdmin(admin.ModelAdmin):
     
 @admin.register(Imageuser)
 class ImageuserAdmin(admin.ModelAdmin):
+    ...
+    
+
+@admin.register(OtpCode)
+class OtpCodeAdmin(admin.ModelAdmin):
     ...

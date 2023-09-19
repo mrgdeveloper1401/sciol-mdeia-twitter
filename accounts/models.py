@@ -62,7 +62,7 @@ class User(AbstractBaseUser, CreateModel, UpdateModel):
         
 class Imageuser(CreateModel):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
-    image = models.FileField(upload_to='profile')
+    image = models.ImageField(upload_to='profile')
     
     class Meta:
         verbose_name = _('image user')
@@ -95,3 +95,18 @@ class NotificationModel(CreateModel):
         verbose_name = _('notification-model')
         verbose_name_plural = _('notifications-models')
         db_table = 'notofication-model'
+        
+
+class OtpCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    email = models.EmailField(unique=True)
+    mobile_phone = models.CharField(_('mobile'), max_length=11, unique=True, blank=True)
+    active_code = models.PositiveIntegerField()
+    
+    def __str__(self):
+        return f'{self.email} -- {self.mobile_phone}'
+    
+    class Meta:
+        verbose_name = _('otp-code')
+        verbose_name_plural = _('otp-codes')
+        db_table = 'otp-code-model'

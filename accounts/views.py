@@ -1,8 +1,8 @@
 from typing import Any
 from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from .models import User, RelationUserModel, NotificationModel
-from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm, UserEditProfileForm, ActiveForm
+from .models import User, RelationUserModel, NotificationModel, OtpCode
+from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm, UserEditProfileForm, VerifyCodeForm
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -25,30 +25,47 @@ class UserSignupView(View):
     def post(self,requests):
         form = self.form_class(requests.POST)
         if form.is_valid():
-            random_code = random.randint(1000, 999999)
             cd = form.cleaned_data
+            random_code = random.randint(1000, 999999)
             send_otp_code(cd['email'], random_code)
-            User.objects.create_user(
-                mobile_phone=cd['mobile_phone'], 
-                username=cd['username'],
-                email=cd['email'],
-                full_name = cd['full_name'],
-                password=cd['password'],
-                birthday = cd['birthday']
-                
-            )
-            messages.success(requests, 'successfully create account', 'success')
-            return redirect('post:home')
+            OtpCode.objects.create(email=cd['email'], active_code=random_code)
+            requests.session['User_register_info'] = {
+                'email' : cd['email'],
+                'full_name': cd['full_name'],
+                'password': cd['password'],
+            }
+            # messages.success(requests, 'successfully create account', 'success')
+            return redirect('accounts:verify_code')
         return render(requests, self.template_name, {'form': form})
 
 
-class ActiveView(View):
-    form_class = ActiveForm
-    template_name = ''
+class VerifyUserView(View):
+    form_class = VerifyCodeForm
+    template_name = 'accounts/verify_code.html'
     
     def get(self, request):
-        ...
-
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+        
+    def post(self, request):
+        user_session = request.session['User_register_info']
+        code_instance = OtpCode.objects.get(email=user_session['email'])
+        form = self.form_class()
+        if form.is_valid():
+            cd = form.cleaned_data
+            if cd['code'] == code_instance.code:
+                User.objects.create_user(
+                    user_session['email'],
+                    user_session['full_name'],
+                    user_session['password']
+                )
+                code_instance.delete()
+                messages.success(request, 'successfully create account', 'success')
+                return redirect('post:home')
+        messages.error(request, 'wrong code', 'warning')
+        return redirect('accounts:verify_code')
+            
+            
 class SignInView(View):
 
     def setup(self, request, *args, **kwargs):

@@ -121,6 +121,5 @@ class UserEditProfileForm(forms.ModelForm):
         fields = ('username', 'email', 'full_name', 'mobile_phone', 'gender_choose')
         
 
-class ActiveForm(forms.ModelForm):
-    model = OtpCode
-    fields = '__all__'
+class VerifyCodeForm(forms.Form):
+    code = forms.IntegerField()

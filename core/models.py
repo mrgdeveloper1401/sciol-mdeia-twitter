@@ -14,7 +14,7 @@ class CreateModel(models.Model):
 
 
 class UpdateModel(models.Model):
-    update_at = models.DateTimeField(_('update_at'), default=timezone.now, null=True)
+    update_at = models.DateTimeField(_('update_at'), null=True, blank=True)
     # update = models.DateTimeField(_('update'), auto_now=True)
     
     class Meta:

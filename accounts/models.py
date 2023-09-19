@@ -24,7 +24,7 @@ class User(AbstractBaseUser, CreateModel, UpdateModel):
     gender_choose = models.CharField(_("Gender"), max_length=1, choices=gender)
     
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['mobile_phone', 'full_name', 'username']
+    REQUIRED_FIELDS = ('full_name', )
     
     objects = MyManager()
     
@@ -97,14 +97,14 @@ class NotificationModel(CreateModel):
         db_table = 'notofication-model'
         
 
-class OtpCode(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class OtpCode(CreateModel):
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField(unique=True)
-    mobile_phone = models.CharField(_('mobile'), max_length=11, unique=True, blank=True)
+    # mobile_phone = models.CharField(_('mobile'), max_length=11, unique=True, blank=True)
     active_code = models.PositiveIntegerField()
     
     def __str__(self):
-        return f'{self.email} -- {self.mobile_phone}'
+        return f'{self.email} -- {self.active_code}'
     
     class Meta:
         verbose_name = _('otp-code')

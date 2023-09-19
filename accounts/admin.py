@@ -41,8 +41,7 @@ class UsersAdmin(UserAdmin):
         
     )
     add_fieldsets = (
-        (None, {'fields': ('full_name', 'email', 'username', 'mobile_phone', 'password1', 'password2', 
-                           'gender_choose', 'birthday')})
+        (None, {'fields': ('full_name', 'email', 'password1', 'password2')})
     ),
     
     change_password_form = AdminPasswordChangeForm

@@ -2,7 +2,7 @@ from typing import Any
 from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from .models import User, RelationUserModel, NotificationModel
-from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm, UserEditProfileForm
+from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm, UserEditProfileForm, ActiveForm
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -11,7 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from post.models import PostModel
 from django.contrib.auth import views as auth_views
 from django.urls import reverse, reverse_lazy
-
+import random
+from utils import send_otp_code
 
 class UserSignupView(View):
     form_class = UserSignUpForm
@@ -24,7 +25,9 @@ class UserSignupView(View):
     def post(self,requests):
         form = self.form_class(requests.POST)
         if form.is_valid():
+            random_code = random.randint(1000, 999999)
             cd = form.cleaned_data
+            send_otp_code(cd['email'], random_code)
             User.objects.create_user(
                 mobile_phone=cd['mobile_phone'], 
                 username=cd['username'],
@@ -38,6 +41,13 @@ class UserSignupView(View):
             return redirect('post:home')
         return render(requests, self.template_name, {'form': form})
 
+
+class ActiveView(View):
+    form_class = ActiveForm
+    template_name = ''
+    
+    def get(self, request):
+        ...
 
 class SignInView(View):
 

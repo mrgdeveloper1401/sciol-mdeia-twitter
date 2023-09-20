@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
-from .models import User, RelationUserModel, RecycleUser
+from .models import User, RelationUserModel, RecycleUser, NotificationModel, Imageuser, OtpCode
 from .form import UserChangeForms, UserCreationForms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -36,13 +36,12 @@ class UsersAdmin(UserAdmin):
         ('authenticate', {'fields': ('email', 'password')}),
         (('persolan info'), {'fields': ('full_name','username', 'mobile_phone', 'gender_choose')}),
         (('permissions', {'fields': ('is_admin','is_superuser', 'is_active' )})),
-        (('important date', {'fields': ('last_login','create_at')})),
+        (('important date', {'fields': ('last_login', 'birthday', 'create_at')})),
         
         
     )
     add_fieldsets = (
-        (None, {'fields': ('full_name', 'email', 'username', 'mobile_phone', 'password1', 'password2', 
-                           'gender_choose')})
+        (None, {'fields': ('full_name', 'email', 'password1', 'password2')})
     ),
     
     change_password_form = AdminPasswordChangeForm
@@ -54,3 +53,19 @@ admin.site.unregister(Group)
 @admin.register(RelationUserModel)
 class RelationUserAdmin(admin.ModelAdmin):
     list_display = ('from_user', 'to_user', 'create_at')
+    
+
+@admin.register(NotificationModel)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'body', 'create_at']
+    ordering = ('-create_at', )
+    
+    
+@admin.register(Imageuser)
+class ImageuserAdmin(admin.ModelAdmin):
+    ...
+    
+
+@admin.register(OtpCode)
+class OtpCodeAdmin(admin.ModelAdmin):
+    ...

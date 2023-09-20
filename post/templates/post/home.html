@@ -23,13 +23,17 @@
             <h5 class="card-header text-center"><a href='{% url 'accounts:profile' posts.user.id %}'> {{ posts.user }} </a> </br></h5>
             <div class="card-body">
               <p class="post-home"><a href='{{ posts.get_absolute_url }}'>{{ posts.body }}</a> </br></p> <hr>
-
               </br>
               {% if posts.user.id == request.user.id %}
                 <a href="{% url "post:update_post" posts.id %}" class="btn btn-primary">update post</a>
                 <a href='{% url "post:delete_post" posts.id %}' class='btn btn-danger'>delete post</a>
               
               {% endif %}
+              <a href='#'>comment</a>
+              <a href='#'>like</a>
+              <a href='#'>dislike</a>
+              <span>create {{ posts.create_at }}</span>
+              <span>update {{ posts.update_at }}</span>
             </div>
           </div>
         {% endfor %}

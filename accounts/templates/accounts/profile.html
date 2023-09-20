@@ -10,6 +10,8 @@
     email: {{ user.email }} </br>
     mobbile phone: {{ user.mobile_phone }} </br></br>
 
+    <a href='{% url "accounts:edit_profile" request.user.id %}' class='btn btn-info'>edit profile</a>
+
 
     {% if request.user.id != user.id and not is_following %}
         <a class='btn btn-primary' href='{% url "accounts:user_follow" user.id %}' >follow</a>
@@ -18,9 +20,12 @@
         <a class='btn btn-primary' href='{% url "accounts:user_unfollow" user.id %}' >unfollow</a>
 
     {% endif %}
+</br>
+    
+    <span>all post {{ post.count }}</span>
 
 
 
 
 
-{% endblock  %}
+{% endblock  %} 

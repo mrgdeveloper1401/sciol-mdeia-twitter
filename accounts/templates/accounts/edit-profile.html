@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>edit user</title>
+{% endblock  %}
+
+{% block content %}
+    <section>
+        <form method='POST' action=''>
+            {% csrf_token %}
+            {{ user }}
+            <input type='submit' value='edit profile' class='btn btn-primary'>
+        </form>
+    </section>
+{% endblock  %}

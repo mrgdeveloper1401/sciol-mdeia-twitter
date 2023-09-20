@@ -17,7 +17,7 @@ class HomeView(View):
     from_class = PostSearchForms
     
     def get(self, request):
-        post = PostModel.objects.all()
+        post = PostModel.objects.filter(is_active=True)[:3]
         if request.GET.get('search'):
             post = post.filter(body__contains=request.GET['search'])
             
@@ -140,7 +140,7 @@ class PostCreateView(LoginRequiredMixin, View):
             cd = create.cleaned_data
             new_create = create.save(commit=False)
             new_create.user = request.user
-            new_create.slug = slugify(cd['body'][:30])
+            new_create.slug = slugify(cd['body'])
             new_create.save()
             messages.success(request, 'create post', 'success')
             return redirect('post:home')

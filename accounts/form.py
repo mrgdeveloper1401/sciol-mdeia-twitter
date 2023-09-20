@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from .models import User
+from .models import User, OtpCode
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import AuthenticationForm
+from django.core import validators
 
 
 class UserCreationForms(forms.ModelForm):
@@ -11,14 +12,7 @@ class UserCreationForms(forms.ModelForm):
     password2 = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
-        fields = ('username', 'email', 'mobile_phone', 'full_name')
-        
-            
-    # def clean_password2(self):
-    #     cd = self.cleaned_data
-    #     if cd['password1'] and cd['password2'] and cd['password1'] != cd['password2']:
-    #         raise ValidationError('password1 must be same')
-    #     return cd['password2']
+        fields = ('email', 'full_name')
             
     def clean(self):
         cd = super().clean()
@@ -32,20 +26,12 @@ class UserCreationForms(forms.ModelForm):
         if User.objects.filter(email=cd['email']).exists():
             raise ValidationError('this email is already in exisits')
         return cd['email']
-    
-    def clean_mobile_phone(self):
-        cd = self.cleaned_data
-        if User.objects.filter(mobile_phone=cd['mobile_phone']).exists():
-            raise ValidationError('this mobile_phone is already in exisits')
-        return cd['mobile_phone']
 
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
-            # if hasattr(self, "save_m2m"):
-            #     self.save_m2m()
         return user
 
     
@@ -68,22 +54,26 @@ class UserSignUpForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('mobile_phone', 'username', 'email', 'full_name')
+        fields = ('email', 'full_name')
         
         widgets = {
-            'mobile_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter phone number'}),
-            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username'}),
+            # 'mobile_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter phone number'}),
+            # 'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'enter email address'}),
             'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter full name'}),
+            # 'birthday': forms.TextInput(attrs={'class': 'form-control'}),
+
         }
         
         labels = {
-            'mobile_phone': 'mobile phone',
-            'username': 'username',
+            # 'mobile_phone': 'mobile phone',
+            # 'username': 'username',
             'email': 'email',
             'full_name': 'full name',
+            # 'birth_day': 'birth day',
 
         }
+        
         
     def clean(self):
         cd = super().clean()
@@ -98,17 +88,17 @@ class UserSignUpForm(forms.ModelForm):
             raise ValidationError('this email is already in exisits')
         return cd['email']
     
-    def clean_mobile_phone(self):
-        cd = self.cleaned_data
-        if User.objects.filter(mobile_phone=cd['mobile_phone']).exists():
-            raise ValidationError('this mobile_phone is already in exisits')
-        return cd['mobile_phone']
+    # def clean_mobile_phone(self):
+    #     cd = self.cleaned_data
+    #     if User.objects.filter(mobile_phone=cd['mobile_phone']).exists():
+    #         raise ValidationError('this mobile_phone is already in exisits')
+    #     return cd['mobile_phone']
     
-    def clean_username(self):
-        cd = self.cleaned_data
-        if User.objects.filter(username=cd['username']).exists():
-           raise ValidationError('this username is already in exisits')
-        return cd['username']
+    # def clean_username(self):
+    #     cd = self.cleaned_data
+    #     if User.objects.filter(username=cd['username']).exists():
+    #        raise ValidationError('this username is already in exisits')
+    #     return cd['username']
         
 class UserSignIn(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter username or email'}))
@@ -129,3 +119,7 @@ class UserEditProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'full_name', 'mobile_phone', 'gender_choose')
+        
+
+class VerifyCodeForm(forms.Form):
+    code = forms.IntegerField()

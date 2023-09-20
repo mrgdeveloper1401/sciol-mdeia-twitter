@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'post.apps.PostConfig',
     'api.apps.ApiConfig',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'groupps.apps.GrouppsConfig',
+    
     
     
 ]

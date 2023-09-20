@@ -1,8 +1,8 @@
 from typing import Any
 from django import http
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from .models import User, RelationUserModel
-from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm, UserEditProfileForm
+from .models import User, RelationUserModel, NotificationModel, OtpCode
+from .form import UserCreationForms, UserChangeForms, UserSignIn, UserSignUpForm, UserEditProfileForm, VerifyCodeForm
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -11,7 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from post.models import PostModel
 from django.contrib.auth import views as auth_views
 from django.urls import reverse, reverse_lazy
-
+import random
+from utils import send_otp_code
 
 class UserSignupView(View):
     form_class = UserSignUpForm
@@ -25,19 +26,46 @@ class UserSignupView(View):
         form = self.form_class(requests.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            User.objects.create_user(
-                mobile_phone=cd['mobile_phone'], 
-                username=cd['username'],
-                email=cd['email'],
-                full_name = cd['full_name'],
-                password=cd['password'],
-                
-            )
-            messages.success(requests, 'successfully create account', 'success')
-            return redirect('post:home')
+            random_code = random.randint(1000, 999999)
+            send_otp_code(cd['email'], random_code)
+            OtpCode.objects.create(email=cd['email'], active_code=random_code)
+            requests.session['User_register_info'] = {
+                'email' : cd['email'],
+                'full_name': cd['full_name'],
+                'password': cd['password'],
+            }
+            # messages.success(requests, 'successfully create account', 'success')
+            return redirect('accounts:verify_code')
         return render(requests, self.template_name, {'form': form})
 
 
+class VerifyUserView(View):
+    form_class = VerifyCodeForm
+    template_name = 'accounts/verify_code.html'
+    
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+        
+    def post(self, request):
+        user_session = request.session['User_register_info']
+        code_instance = OtpCode.objects.get(email=user_session['email'])
+        form = self.form_class()
+        if form.is_valid():
+            cd = form.cleaned_data
+            if cd['code'] == code_instance.code:
+                User.objects.create_user(
+                    user_session['email'],
+                    user_session['full_name'],
+                    user_session['password']
+                )
+                code_instance.delete()
+                messages.success(request, 'successfully create account', 'success')
+                return redirect('post:home')
+        messages.error(request, 'wrong code', 'warning')
+        return redirect('accounts:verify_code')
+            
+            
 class SignInView(View):
 
     def setup(self, request, *args, **kwargs):
@@ -84,11 +112,11 @@ class LogOutView(LoginRequiredMixin, View):
         return redirect('accounts:login')
     
     
-class UserProfileView(View):
+class UserProfileView(LoginRequiredMixin,View):
     def get(self, request, user_id):
         is_following = False
         user = User.objects.get(pk=user_id)
-        post = user.posts.all()
+        post = PostModel.objects.all()
         relation = RelationUserModel.objects.filter(from_user=request.user, to_user=user.id)
         if relation.exists():
             is_following = True
@@ -184,3 +212,10 @@ class UserUnfollowView(LoginRequiredMixin, View):
             relation.delete()
             messages.success(request, 'unfollow', 'success')
         return redirect('accounts:profile', user.id)
+    
+
+class NotifictionView(View):
+    def get(self, request):
+        notification = NotificationModel.objects.all()
+        return render(request, 'accounts/notification.html', {'notification': notification})
+        

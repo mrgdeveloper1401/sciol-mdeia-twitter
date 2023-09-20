@@ -7,6 +7,7 @@ urlpatterns = [
     path('signin/', views.SignInView.as_view(), name='login'),
     # path('signin/mobile/', views.SignInMobileView.as_view(), name='login_mobile'),
     path('signup/', views.UserSignupView.as_view(), name='logup'),
+    path('verify/', views.VerifyUserView.as_view(), name='verify_code'),
     path('logout/', views.LogOutView.as_view(), name='logout'),
     path('profile/<int:user_id>/', views.UserProfileView.as_view(), name='profile'),
     # path('profile/<int:user_id>/<str:slug_id>/', views.UserProfileView.as_view(), name='profile_post'),
@@ -17,6 +18,8 @@ urlpatterns = [
     path('follow/<int:user_id>/', views.UserFollowView.as_view(), name='user_follow'),
     path('unfollow/<int:user_id>/', views.UserUnfollowView.as_view(), name='user_unfollow'),
     path('edit/<int:user_id>/', views.EditProfileView.as_view(), name='edit_profile'),
+    path('notification/', views.NotifictionView.as_view(), name='notification_user'),
+    
     
     
     
